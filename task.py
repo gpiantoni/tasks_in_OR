@@ -14,7 +14,7 @@ from serial import Serial
 from serial import SerialException
 
 IMAGES_DIR = Path('images/prf').resolve()
-STIMULI_TSV = '/home/giovanni/tools/tasks/images/template_task-prf.tsv'
+STIMULI_TSV = str(Path('images/template_task-prf.tsv').resolve())
 
 COM_PORT = 'COM9'
 BAUDRATE = 9600
