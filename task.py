@@ -6,16 +6,31 @@ from PyQt5.QtGui import QKeyEvent, QPainter
 from PyQt5.QtCore import Qt
 import sys
 from struct import pack
+import logging
 
-from numpy import arange, r_, c_, array, ones, where, genfromtxt, zeros, dtype
+from numpy import where, genfromtxt, zeros, dtype
 from pathlib import Path
 from serial import Serial
+from serial import SerialException
 
 IMAGES_DIR = Path('images/prf').resolve()
 STIMULI_TSV = '/home/giovanni/tools/tasks/images/template_task-prf.tsv'
 
 COM_PORT = 'COM9'
 BAUDRATE = 9600
+logname = Path('log.txt').resolve()  # use time in logfile name
+
+logging.basicConfig(
+    filename=logname,
+    filemode='w',
+    format='%(asctime)s.%(msecs)d\t%(name)s\t%(levelname)s\t%(message)s',
+    datefmt='%H:%M:%S',
+    level=logging.DEBUG)
+logging.info("Log File")
+
+lg = logging.getLogger('task')
+lg.addHandler(logging.StreamHandler())
+
 
 class PrettyWidget(QtWidgets.QLabel):
     started = False
@@ -30,9 +45,9 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def initUI(self):
 
-        print('reading images')
+        lg.info('Reading images')
         self.stimuli = _convert_stimuli()
-        print('finished reading')
+        lg.info('Reading images: finished')
 
         # background color
         im = self.stimuli['pixmap'][0].toImage()
@@ -46,8 +61,8 @@ class PrettyWidget(QtWidgets.QLabel):
         self.setGeometry(300, 300, 1000, 1000)
         try:
             self.serial = Serial(COM_PORT, baudrate=BAUDRATE)
-        except:
-            print('could not open serial port')
+        except SerialException:
+            lg.warning('could not open serial port')
         else:
             self.serial.write(pack('>B', 250))
 
@@ -93,7 +108,7 @@ class PrettyWidget(QtWidgets.QLabel):
         self.timer = QtCore.QTimer()
         self.timer.setTimerType(Qt.PreciseTimer)
         self.timer.timeout.connect(self.check_time)
-        self.timer.start(5)
+        self.timer.start(1)
 
         self.time.start()
 
@@ -107,9 +122,10 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def keyPressEvent(self, event):
         if type(event) == QKeyEvent:
-            if not self.started and (
-                event.key() == Qt.Key_Enter or
-                event.key() == Qt.Key_Return):
+            if (not self.started
+                and (
+                    event.key() == Qt.Key_Enter
+                    or event.key() == Qt.Key_Return)):
 
                 self.started = True
                 self.start()
