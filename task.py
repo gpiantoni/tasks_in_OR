@@ -18,6 +18,8 @@ STIMULI_TSV = '/home/giovanni/tools/tasks/images/template_task-prf.tsv'
 
 COM_PORT = 'COM9'
 BAUDRATE = 9600
+QTIMER_INTERVAL = 1
+
 logname = Path('log.txt').resolve()  # use time in logfile name
 
 logging.basicConfig(
@@ -31,13 +33,20 @@ logging.info("Log File")
 lg = logging.getLogger('task')
 lg.addHandler(logging.StreamHandler())
 
+try:
+    serial_port = Serial(COM_PORT, baudrate=BAUDRATE)
+except SerialException:
+    serial_port = None
+    lg.warning('could not open serial port')
+
 
 class PrettyWidget(QtWidgets.QLabel):
     started = False
     timer = None
-    serial = None
     current_index = 0
     current_pixmap = None
+    paused = False
+    delay = 0  # used when pausing
 
     def __init__(self):
         super().__init__()
@@ -59,28 +68,39 @@ class PrettyWidget(QtWidgets.QLabel):
         # self.showFullScreen()
         self.setCursor(Qt.BlankCursor)
         self.setGeometry(300, 300, 1000, 1000)
-        try:
-            self.serial = Serial(COM_PORT, baudrate=BAUDRATE)
-        except SerialException:
-            lg.warning('could not open serial port')
+        self.serial(250)
+
+    def serial(self, trigger):
+        """trigger needs to be between 0 and 255. If none, then it closes the
+        serial port"""
+        if trigger is None:
+            if serial_port is not None:
+                serial_port.close()
         else:
-            self.serial.write(pack('>B', 250))
+            lg.info(f'Sending trigger {trigger:03d}')
+            if serial_port is not None:
+                serial_port.write(pack('>B', trigger))
 
     def paintEvent(self, event):
 
         qp = QPainter()
         qp.begin(self)
 
-        rect_x = event.rect().center().x()
-        rect_y = event.rect().center().y()
-        if self.current_pixmap is not None:
-            img_w = self.current_pixmap.rect().width()
-            img_h = self.current_pixmap.rect().height()
-            img_origin_x = rect_x - int(img_w / 2)
-            img_origin_y = rect_y - int(img_h / 2)
-            qp.drawPixmap(img_origin_x, img_origin_y, self.current_pixmap)
+        if self.paused:
+            self.draw_pause(event, qp)
 
-        self.drawText(event, qp)
+        else:
+            rect_x = event.rect().center().x()
+            rect_y = event.rect().center().y()
+            if self.current_pixmap is not None:
+                img_w = self.current_pixmap.rect().width()
+                img_h = self.current_pixmap.rect().height()
+                img_origin_x = rect_x - int(img_w / 2)
+                img_origin_y = rect_y - int(img_h / 2)
+                qp.drawPixmap(img_origin_x, img_origin_y, self.current_pixmap)
+
+            self.drawText(event, qp)
+
         qp.end()
 
     def drawText(self, event, qp):
@@ -89,36 +109,63 @@ class PrettyWidget(QtWidgets.QLabel):
         qp.setFont(QtGui.QFont('Decorative', 30))
         qp.drawText(event.rect(), Qt.AlignCenter, '+')
 
+    def draw_pause(self, event, qp):
+
+        qp.setPen(QtGui.QColor(168, 34, 3))
+        qp.setFont(QtGui.QFont('Decorative', 60))
+        qp.drawText(event.rect(), Qt.AlignCenter, 'PAUSED')
+
     def check_time(self):
 
-        index_image = where(self.stimuli['onset'] >= self.time.elapsed())[0][0]
+        elapsed = self.time.elapsed() + self.delay
+
+        index_image = where(self.stimuli['onset'] >= elapsed)[0][0]
 
         if index_image != self.current_index:
             self.current_index = index_image
             self.current_pixmap = self.stimuli['pixmap'][index_image]
             self.update()
 
-            if self.serial is not None:
-                self.serial.write(pack('>B', self.stimuli['trigger'][index_image]))
+            i_trigger = self.stimuli['trigger'][index_image]
+            self.serial(i_trigger)
 
-        if self.time.elapsed() > self.stimuli['onset'][-1]:
+        if elapsed > self.stimuli['onset'][-1]:
             self.stop()
 
     def start(self):
         self.timer = QtCore.QTimer()
         self.timer.setTimerType(Qt.PreciseTimer)
         self.timer.timeout.connect(self.check_time)
-        self.timer.start(1)
+        self.timer.start(QTIMER_INTERVAL)
 
         self.time.start()
 
     def stop(self):
-        if self.serial is not None:
-            self.serial.write(pack('>B', 251))
-            self.serial.close()
+        lg.info('Stopping task')
+
+        self.serial(251)
+        self.serial(None)
+
         if self.timer is not None:
             self.timer.stop()
-        self.hide()
+
+        QApplication.quit()
+
+    def pause(self):
+        if not self.paused:
+            self.paused = True
+            self.delay += self.time.elapsed()
+            self.timer.stop()
+            self.serial(253)
+            lg.info('Pausing the task')
+            self.update()
+
+        else:
+            self.paused = False
+            self.time.restart()
+            self.serial(254)
+            lg.info('Pause finished: restarting the task')
+            self.timer.start(QTIMER_INTERVAL)
 
     def keyPressEvent(self, event):
         if type(event) == QKeyEvent:
@@ -131,7 +178,7 @@ class PrettyWidget(QtWidgets.QLabel):
                 self.start()
 
             elif event.key() == Qt.Key_Space:
-                pass
+                self.pause()
 
             elif event.key() == Qt.Key_Escape:
                 self.stop()
