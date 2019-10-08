@@ -50,9 +50,6 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def __init__(self):
         super().__init__()
-        self.initUI()
-
-    def initUI(self):
 
         lg.info('Reading images')
         self.stimuli = _convert_stimuli()
@@ -90,14 +87,21 @@ class PrettyWidget(QtWidgets.QLabel):
             self.draw_pause(event, qp)
 
         else:
-            rect_x = event.rect().center().x()
-            rect_y = event.rect().center().y()
+            window_rect = event.rect()
+            rect_x = window_rect.center().x()
+            rect_y = window_rect.center().y()
             if self.current_pixmap is not None:
-                img_w = self.current_pixmap.rect().width()
-                img_h = self.current_pixmap.rect().height()
-                img_origin_x = rect_x - int(img_w / 2)
-                img_origin_y = rect_y - int(img_h / 2)
-                qp.drawPixmap(img_origin_x, img_origin_y, self.current_pixmap)
+                image_rect = self.current_pixmap.rect()
+
+                size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
+                img_origin_x = rect_x - int(size.width() / 2)
+                img_origin_y = rect_y - int(size.height() / 2)
+                qp.drawPixmap(
+                    img_origin_x,
+                    img_origin_y,
+                    window_rect.width(),
+                    window_rect.height(),
+                    self.current_pixmap)
 
             self.drawText(event, qp)
 
@@ -119,18 +123,19 @@ class PrettyWidget(QtWidgets.QLabel):
 
         elapsed = self.time.elapsed() + self.delay
 
-        index_image = where(self.stimuli['onset'] >= elapsed)[0][0]
-
-        if index_image != self.current_index:
-            self.current_index = index_image
-            self.current_pixmap = self.stimuli['pixmap'][index_image]
-            self.update()
-
-            i_trigger = self.stimuli['trigger'][index_image]
-            self.serial(i_trigger)
-
-        if elapsed > self.stimuli['onset'][-1]:
+        index_image = where(self.stimuli['onset'] >= elapsed)[0]
+        if len(index_image) == 0:
             self.stop()
+        else:
+            index_image = index_image[0]
+
+            if index_image != self.current_index:
+                self.current_index = index_image
+                self.current_pixmap = self.stimuli['pixmap'][index_image]
+                self.update()
+
+                i_trigger = self.stimuli['trigger'][index_image]
+                self.serial(i_trigger)
 
     def start(self):
         self.timer = QtCore.QTimer()
