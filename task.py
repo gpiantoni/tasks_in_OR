@@ -8,6 +8,7 @@ import sys
 from struct import pack, unpack
 import logging
 
+from random import random
 from numpy import where, genfromtxt, zeros, dtype
 from pathlib import Path
 from serial import Serial
@@ -55,6 +56,8 @@ class PrettyWidget(QtWidgets.QLabel):
     current_pixmap = None
     paused = False
     delay = 0  # used when pausing
+    cross_delay = 2
+    cross_color = 'green'
 
     def __init__(self):
         super().__init__()
@@ -120,14 +123,23 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def drawText(self, event, qp):
 
-        qp.setPen(QtGui.QColor(168, 34, 3))
-        qp.setFont(QtGui.QFont('Decorative', 30))
+        elapsed = self.time.elapsed() + self.delay
+        if elapsed > self.cross_delay:
+            self.cross_delay += random() * 5000 + 2000
+            if self.cross_color == 'green':
+                self.cross_color = 'red'
+            else:
+                self.cross_color = 'green'
+
+        color = QtGui.QColor(self.cross_color)
+        qp.setPen(color)
+        qp.setFont(QtGui.QFont('Decorative', 80))
         qp.drawText(event.rect(), Qt.AlignCenter, '+')
 
     def draw_pause(self, event, qp):
 
         qp.setPen(QtGui.QColor(168, 34, 3))
-        qp.setFont(QtGui.QFont('Decorative', 60))
+        qp.setFont(QtGui.QFont('Decorative', 50))
         qp.drawText(event.rect(), Qt.AlignCenter, 'PAUSED')
 
     def check_time(self):
@@ -143,10 +155,10 @@ class PrettyWidget(QtWidgets.QLabel):
             if index_image != self.current_index:
                 self.current_index = index_image
                 self.current_pixmap = self.stimuli['pixmap'][index_image]
-                self.update()
 
                 i_trigger = self.stimuli['trigger'][index_image]
                 self.serial(i_trigger)
+        self.update()
 
     def start(self):
         self.timer.start(QTIMER_INTERVAL)
