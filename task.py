@@ -2,7 +2,7 @@
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtGui import QKeyEvent, QPainter
+from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent
 from PyQt5.QtCore import Qt
 import sys
 from struct import pack, unpack
@@ -69,7 +69,6 @@ class PrettyWidget(QtWidgets.QLabel):
         self.show()
 
         self.time = QtCore.QTime()
-        # self.showFullScreen()
         self.setCursor(Qt.BlankCursor)
         self.setGeometry(300, 300, 1000, 1000)
         self.serial(250)
@@ -193,7 +192,7 @@ class PrettyWidget(QtWidgets.QLabel):
             self.timer.start(QTIMER_INTERVAL)
 
     def keyPressEvent(self, event):
-        if type(event) == QKeyEvent:
+        if isinstance(event, QKeyEvent):
             if (not self.started
                 and (
                     event.key() == Qt.Key_Enter
@@ -207,6 +206,20 @@ class PrettyWidget(QtWidgets.QLabel):
 
             elif event.key() == Qt.Key_Escape:
                 self.stop()
+
+            else:
+                super().keyPressEvent(event)
+        else:
+            super().keyPressEvent(event)
+
+    def mouseDoubleClickEvent(self, event):
+        if isinstance(event, QMouseEvent):
+            if self.isFullScreen():
+                self.showNormal()
+            else:
+                self.showFullScreen()
+        else:
+            super().mouseDoubleClickEvent(event)
 
 
 class SerialInputWorker(QtCore.QObject):
