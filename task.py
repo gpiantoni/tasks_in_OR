@@ -15,14 +15,14 @@ from serial import SerialException
 from datetime import datetime
 
 IMAGES_DIR = Path('images/prf').resolve()
-STIMULI_TSV = str(Path('images/template_task-prf.tsv').resolve())
+STIMULI_TSV = str(Path('images/template_task-prf_random.tsv').resolve())
 
 COM_PORT_TRIGGER = 'COM9'
 COM_PORT_INPUT = 'COM8'
 BAUDRATE = 9600
 QTIMER_INTERVAL = 1
 
-logname = Path(f'log_{datetime.now():%Y%m%d_%H%M%S}').resolve()
+logname = Path(f'log_{datetime.now():%Y%m%d_%H%M%S}.txt').resolve()
 
 logging.basicConfig(
     filename=logname,
