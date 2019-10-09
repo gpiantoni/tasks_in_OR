@@ -69,6 +69,10 @@ class PrettyWidget(QtWidgets.QLabel):
         self.show()
 
         self.time = QtCore.QTime()
+        self.timer = QtCore.QTimer()
+        self.timer.setTimerType(Qt.PreciseTimer)
+        self.timer.timeout.connect(self.check_time)
+
         self.setCursor(Qt.BlankCursor)
         self.setGeometry(300, 300, 1000, 1000)
         self.serial(250)
@@ -105,8 +109,8 @@ class PrettyWidget(QtWidgets.QLabel):
                 qp.drawPixmap(
                     img_origin_x,
                     img_origin_y,
-                    window_rect.width(),
-                    window_rect.height(),
+                    size.width(),
+                    size.height(),
                     self.current_pixmap)
 
             self.drawText(event, qp)
@@ -144,9 +148,6 @@ class PrettyWidget(QtWidgets.QLabel):
                 self.serial(i_trigger)
 
     def start(self):
-        self.timer = QtCore.QTimer()
-        self.timer.setTimerType(Qt.PreciseTimer)
-        self.timer.timeout.connect(self.check_time)
         self.timer.start(QTIMER_INTERVAL)
         self.start_serial_input()
 
@@ -182,7 +183,6 @@ class PrettyWidget(QtWidgets.QLabel):
             self.timer.stop()
             self.serial(253)
             lg.info('Pausing the task')
-            self.update()
 
         else:
             self.paused = False
@@ -190,6 +190,7 @@ class PrettyWidget(QtWidgets.QLabel):
             self.serial(254)
             lg.info('Pause finished: restarting the task')
             self.timer.start(QTIMER_INTERVAL)
+        self.update()
 
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
