@@ -5,7 +5,7 @@ from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtGui import QKeyEvent, QPainter
 from PyQt5.QtCore import Qt
 import sys
-from struct import pack
+from struct import pack, unpack
 import logging
 
 from numpy import where, genfromtxt, zeros, dtype
@@ -16,7 +16,8 @@ from serial import SerialException
 IMAGES_DIR = Path('images/prf').resolve()
 STIMULI_TSV = str(Path('images/template_task-prf.tsv').resolve())
 
-COM_PORT = 'COM9'
+COM_PORT_TRIGGER = 'COM9'
+COM_PORT_INPUT = 'COM8'
 BAUDRATE = 9600
 QTIMER_INTERVAL = 1
 
@@ -34,10 +35,16 @@ lg = logging.getLogger('task')
 lg.addHandler(logging.StreamHandler())
 
 try:
-    serial_port = Serial(COM_PORT, baudrate=BAUDRATE)
+    port_trigger = Serial(COM_PORT_TRIGGER, baudrate=BAUDRATE)
 except SerialException:
-    serial_port = None
-    lg.warning('could not open serial port')
+    port_trigger = None
+    lg.warning('could not open serial port for triggers')
+
+try:
+    port_input = Serial(COM_PORT_INPUT, baudrate=BAUDRATE)
+except SerialException:
+    port_input = None
+    lg.warning('could not open serial port to read input')
 
 
 class PrettyWidget(QtWidgets.QLabel):
@@ -71,12 +78,12 @@ class PrettyWidget(QtWidgets.QLabel):
         """trigger needs to be between 0 and 255. If none, then it closes the
         serial port"""
         if trigger is None:
-            if serial_port is not None:
-                serial_port.close()
+            if port_trigger is not None:
+                port_trigger.close()
         else:
             lg.info(f'Sending trigger {trigger:03d}')
-            if serial_port is not None:
-                serial_port.write(pack('>B', trigger))
+            if port_trigger is not None:
+                port_trigger.write(pack('>B', trigger))
 
     def paintEvent(self, event):
 
@@ -142,8 +149,21 @@ class PrettyWidget(QtWidgets.QLabel):
         self.timer.setTimerType(Qt.PreciseTimer)
         self.timer.timeout.connect(self.check_time)
         self.timer.start(QTIMER_INTERVAL)
+        self.start_serial_input()
 
         self.time.start()
+
+    def start_serial_input(self):
+        self.input_worker = SerialInputWorker()
+        self.input_thread = QtCore.QThread()
+        self.input_thread.started.connect(self.input_worker.start_reading)
+        self.input_worker.signal_to_main.connect(self.read_serial_input)
+        self.input_worker.moveToThread(self.input_thread)
+        self.input_thread.start()
+
+    def read_serial_input(self, number):
+        lg.input(f'Received input trigger {number}')
+        self.serial(254)
 
     def stop(self):
         lg.info('Stopping task')
@@ -188,6 +208,20 @@ class PrettyWidget(QtWidgets.QLabel):
             elif event.key() == Qt.Key_Escape:
                 self.stop()
 
+
+class SerialInputWorker(QtCore.QObject):
+    signal_to_main = QtCore.pyqtSignal(int)
+
+    def __init__(self):
+        super().__init__()
+
+    @QtCore.pyqtSlot()
+    def start_reading(self):
+        while True:
+            if port_input is not None:
+                serial_input = port_input.read()
+                if serial_input != b'':
+                    self.signal_to_main.emit(unpack('>B', serial_input))
 
 def _convert_stimuli():
 
