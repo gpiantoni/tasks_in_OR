@@ -28,7 +28,7 @@ logname = Path(f'log_{datetime.now():%Y%m%d_%H%M%S}.txt').resolve()
 logging.basicConfig(
     filename=logname,
     filemode='w',
-    format='%(asctime)s.%(msecs)d\t%(name)s\t%(levelname)s\t%(message)s',
+    format='%(asctime)s.%(msecs)03d\t%(name)s\t%(levelname)s\t%(message)s',
     datefmt='%H:%M:%S',
     level=logging.DEBUG)
 logging.info("Log File")
@@ -52,8 +52,7 @@ except SerialException:
 class PrettyWidget(QtWidgets.QLabel):
     started = False
     timer = None
-    current_index = 0
-    current_pixmap = None
+    current_index = None
     paused = False
     delay = 0  # used when pausing
     cross_delay = 2
@@ -104,18 +103,20 @@ class PrettyWidget(QtWidgets.QLabel):
             window_rect = event.rect()
             rect_x = window_rect.center().x()
             rect_y = window_rect.center().y()
-            if self.current_pixmap is not None:
-                image_rect = self.current_pixmap.rect()
+            if self.current_index is not None:
+                current_pixmap = self.stimuli['pixmap'][self.current_index]
+                if current_pixmap is not None:
+                    image_rect = current_pixmap.rect()
 
-                size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
-                img_origin_x = rect_x - int(size.width() / 2)
-                img_origin_y = rect_y - int(size.height() / 2)
-                qp.drawPixmap(
-                    img_origin_x,
-                    img_origin_y,
-                    size.width(),
-                    size.height(),
-                    self.current_pixmap)
+                    size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
+                    img_origin_x = rect_x - int(size.width() / 2)
+                    img_origin_y = rect_y - int(size.height() / 2)
+                    qp.drawPixmap(
+                        img_origin_x,
+                        img_origin_y,
+                        size.width(),
+                        size.height(),
+                        current_pixmap)
 
             self.drawText(event, qp)
 
@@ -125,11 +126,13 @@ class PrettyWidget(QtWidgets.QLabel):
 
         elapsed = self.time.elapsed() + self.delay
         if elapsed > self.cross_delay:
-            self.cross_delay += random() * 5000 + 2000
             if self.cross_color == 'green':
                 self.cross_color = 'red'
+                self.serial(240)
             else:
                 self.cross_color = 'green'
+                self.serial(241)
+            self.cross_delay += random() * 5000 + 2000
 
         color = QtGui.QColor(self.cross_color)
         qp.setPen(color)
@@ -146,18 +149,17 @@ class PrettyWidget(QtWidgets.QLabel):
 
         elapsed = self.time.elapsed() + self.delay
 
-        index_image = where(self.stimuli['onset'] >= elapsed)[0]
-        if len(index_image) == 0:
-            self.stop()
-        else:
-            index_image = index_image[0]
+        index_image = where(self.stimuli['onset'] <= elapsed)[0]
+        if len(index_image) > 0:
+            index_image = index_image[-1]
 
             if index_image != self.current_index:
                 self.current_index = index_image
-                self.current_pixmap = self.stimuli['pixmap'][index_image]
 
-                i_trigger = self.stimuli['trigger'][index_image]
-                self.serial(i_trigger)
+                if index_image is not None:
+                    i_trigger = self.stimuli['trigger'][index_image]
+                    self.serial(i_trigger)
+
         self.update()
 
     def start(self):
@@ -270,8 +272,13 @@ def _convert_stimuli():
     stimuli['onset'][1::2] = tsv['onset'] + tsv['duration']
     stimuli['onset'] *= 1000  # s -> ms
     stimuli['trigger'][::2] = tsv['trial_type']
-    stimuli['pixmap'][::2] = [QtGui.QPixmap(str(IMAGES_DIR / png)) for png in tsv['stim_file']]
-    stimuli['pixmap'][1::2] = stimuli['pixmap'][-2]
+
+    # read images only once
+    stimuli['pixmap'] = None
+    stimuli['pixmap'][::2] = tsv['stim_file']
+    d_images = {png: QtGui.QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file'])}
+    for png, pixmap in d_images.items():
+        stimuli['pixmap'][stimuli['pixmap'] == png] = pixmap
 
     return stimuli
 
