@@ -13,10 +13,8 @@ class SerialThreading(object):
     def __init__(self):
         self.triggers_log = Path('triggers.log').resolve()
 
-        self.port_trigger = serial_for_url('loop://', timeout=0.1)
-        print(self.port_trigger)
-        if not self.port_trigger.is_open:
-            self.port_trigger.open()
+        self.port_trigger = serial_for_url('loop://')
+        sleep(0.5)
         thread = threading.Thread(target=self.run, args=())
         thread.daemon = True
         thread.start()
@@ -25,7 +23,6 @@ class SerialThreading(object):
 
         with self.triggers_log.open('wb') as f:
             while True:
-                # More statements comes here
                 out = self.port_trigger.read()
                 if out != b'':
                     f.write(out)
