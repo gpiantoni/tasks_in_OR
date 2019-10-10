@@ -2,7 +2,7 @@ from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
 from qttasks.prf import PrettyWidget
 from time import sleep
-from serial import serial_for_url
+from serial import serial_for_url, SerialException
 from pathlib import Path
 from struct import unpack
 
@@ -13,8 +13,7 @@ class SerialThreading(object):
     def __init__(self):
         self.triggers_log = Path('triggers.log').resolve()
 
-        self.port_trigger = serial_for_url('loop://')
-        sleep(0.5)
+        self.port_trigger = serial_for_url('loop://', timeout=0.1)
         thread = threading.Thread(target=self.run, args=())
         thread.daemon = True
         thread.start()
@@ -31,7 +30,6 @@ class SerialThreading(object):
 def test_prf_exit(qtbot):
 
     tr = SerialThreading()
-    sleep(1)
 
     w = PrettyWidget(port_trigger=tr.port_trigger)
     qtbot.addWidget(w)
@@ -51,7 +49,6 @@ def test_prf_exit(qtbot):
 def test_prf_exit1(qtbot):
 
     tr = SerialThreading()
-    sleep(1)
 
     w = PrettyWidget(port_trigger=tr.port_trigger)
     qtbot.addWidget(w)
