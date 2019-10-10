@@ -14,17 +14,17 @@ before_install:
 install: 
  # install requirements
  - pip install numpy pyserial pyqt5==5.11.3
- - pip install pytest pytest-qt pytest-cov
+ - pip install pytest pytest-qt pytest-cov codecov
  - pip install -e .
 
 before_script:
   - "export DISPLAY=:99.0"
 
 script:
- - python -c "import vispy; print(vispy.sys_info()); exit()"
  - pytest -v --cov=qttasks tests
 
 after_success:
+ - cat *.log
  - codecov
 
 notifications:
