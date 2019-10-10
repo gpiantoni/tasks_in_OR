@@ -15,8 +15,9 @@ from serial import Serial
 from serial import SerialException
 from datetime import datetime
 
-IMAGES_DIR = Path('images/prf').resolve()
-STIMULI_TSV = str(Path('images/template_task-prf_random.tsv').resolve())
+SCRIPT_DIR = Path(__file__).resolve().parent
+IMAGES_DIR = SCRIPT_DIR / 'images/prf'
+STIMULI_TSV = str(SCRIPT_DIR / 'images/template_task-prf_random.tsv')
 
 COM_PORT_TRIGGER = 'COM9'
 COM_PORT_INPUT = 'COM8'
@@ -33,7 +34,7 @@ logging.basicConfig(
     level=logging.DEBUG)
 logging.info("Log File")
 
-lg = logging.getLogger('task')
+lg = logging.getLogger('prf')
 lg.addHandler(logging.StreamHandler())
 
 try:
@@ -255,6 +256,7 @@ class SerialInputWorker(QtCore.QObject):
                 if serial_input != b'':
                     self.signal_to_main.emit(unpack('>B', serial_input))
 
+
 def _convert_stimuli():
 
     tsv = genfromtxt(
@@ -286,9 +288,12 @@ def _convert_stimuli():
     return stimuli
 
 
-if __name__ == '__main__':
-
+def main():
     app = QApplication(sys.argv)
     w = PrettyWidget()
 
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()

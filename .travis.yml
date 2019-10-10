@@ -1,0 +1,31 @@
+language: python
+
+python:
+ - "3.7"
+
+cache: 
+ - directories:
+   - $HOME/.cache/pip
+
+before_install:
+ # create display with large resolution
+ - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1920x1080x16"
+
+install: 
+ # install requirements
+ - pip install numpy pyserial pyqt5==5.11.3
+ - pip install pytest pytest-qt pytest-cov
+ - pip install -e .
+
+before_script:
+  - "export DISPLAY=:99.0"
+
+script:
+ - python -c "import vispy; print(vispy.sys_info()); exit()"
+ - pytest -v --cov=qttasks tests
+
+after_success:
+ - codecov
+
+notifications:
+ email: false
