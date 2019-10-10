@@ -171,10 +171,10 @@ class PrettyWidget(QtWidgets.QLabel):
         self.update()
 
     def start(self):
+        self.started = True
+        self.time.start()
         self.timer.start(QTIMER_INTERVAL)
         self.start_serial_input()
-
-        self.time.start()
 
     def start_serial_input(self):
         self.input_worker = SerialInputWorker()
@@ -223,7 +223,6 @@ class PrettyWidget(QtWidgets.QLabel):
                     event.key() == Qt.Key_Enter
                     or event.key() == Qt.Key_Return)):
 
-                self.started = True
                 self.start()
 
             elif event.key() == Qt.Key_Space:

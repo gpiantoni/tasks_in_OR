@@ -27,7 +27,7 @@ class SerialThreading(object):
                     f.write(out)
 
 
-def test_prf_exit(qtbot):
+def notest_prf_exit(qtbot):
 
     tr = SerialThreading()
 
@@ -46,31 +46,11 @@ def test_prf_exit(qtbot):
     assert unpack('<' + len(val) * 'B', val) == (250, 251)
 
 
-def test_prf_exit1(qtbot):
+def notest_prf_exit_after_start(qtbot):
 
     tr = SerialThreading()
 
     w = PrettyWidget(port_trigger=tr.port_trigger)
-    qtbot.addWidget(w)
-    sleep(1)
-
-    qtbot.keyEvent(
-        QTest.Click,
-        w,
-        Qt.Key_Escape,
-        )
-
-    with tr.triggers_log.open('rb') as f:
-        val = f.read()
-    assert unpack('<' + len(val) * 'B', val) == (250, 251)
-
-
-"""
-def test_prf(qtbot):
-
-    tr = SerialThreading()
-
-    w = PrettyWidget(port_trigger=port_trigger)
     qtbot.addWidget(w)
 
     qtbot.keyEvent(
@@ -79,15 +59,18 @@ def test_prf(qtbot):
         Qt.Key_Enter,
         )
 
-    sleep(1)
+    w.start()
+
+    sleep(5)
+    w.check_time()
+    sleep(5)
     qtbot.keyEvent(
         QTest.Click,
         w,
         Qt.Key_Escape,
         )
+    sleep(2)
 
     with tr.triggers_log.open('rb') as f:
         val = f.read()
     assert unpack('<' + len(val) * 'B', val) == (250, 251)
-
-"""
