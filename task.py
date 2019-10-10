@@ -150,7 +150,10 @@ class PrettyWidget(QtWidgets.QLabel):
         elapsed = self.time.elapsed() + self.delay
 
         index_image = where(self.stimuli['onset'] <= elapsed)[0]
-        if len(index_image) > 0:
+        if len(index_image) == len(self.stimuli):
+            self.stop()
+
+        elif len(index_image) > 0:
             index_image = index_image[-1]
 
             if index_image != self.current_index:
