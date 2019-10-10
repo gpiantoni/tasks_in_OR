@@ -37,18 +37,6 @@ logging.info("Log File")
 lg = logging.getLogger('prf')
 lg.addHandler(logging.StreamHandler())
 
-try:
-    port_trigger = Serial(COM_PORT_TRIGGER, baudrate=BAUDRATE)
-except SerialException:
-    port_trigger = None
-    lg.warning('could not open serial port for triggers')
-
-try:
-    port_input = Serial(COM_PORT_INPUT, baudrate=BAUDRATE)
-except SerialException:
-    port_input = None
-    lg.warning('could not open serial port to read input')
-
 
 class PrettyWidget(QtWidgets.QLabel):
     started = False
@@ -59,8 +47,24 @@ class PrettyWidget(QtWidgets.QLabel):
     cross_delay = 2
     cross_color = 'green'
 
-    def __init__(self):
+    def __init__(self, port_trigger=None, port_input=None):
         super().__init__()
+
+        if port_trigger is None:
+            try:
+                port_trigger = Serial(COM_PORT_TRIGGER, baudrate=BAUDRATE)
+            except SerialException:
+                port_trigger = None
+                lg.warning('could not open serial port for triggers')
+        self.port_trigger = port_trigger
+
+        if port_input is None:
+            try:
+                port_input = Serial(COM_PORT_INPUT, baudrate=BAUDRATE)
+            except SerialException:
+                port_input = None
+                lg.warning('could not open serial port to read input')
+        self.port_input = port_input
 
         lg.info('Reading images')
         self.stimuli = _convert_stimuli()
@@ -85,12 +89,12 @@ class PrettyWidget(QtWidgets.QLabel):
         """trigger needs to be between 0 and 255. If none, then it closes the
         serial port"""
         if trigger is None:
-            if port_trigger is not None:
-                port_trigger.close()
+            if self.port_trigger is not None:
+                self.port_trigger.close()
         else:
             lg.info(f'Sending trigger {trigger:03d}')
-            if port_trigger is not None:
-                port_trigger.write(pack('>B', trigger))
+            if self.port_trigger is not None:
+                self.port_trigger.write(pack('>B', trigger))
 
     def paintEvent(self, event):
 
@@ -174,6 +178,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def start_serial_input(self):
         self.input_worker = SerialInputWorker()
+        self.input_worker.port_input = self.port_input
         self.input_thread = QtCore.QThread()
         self.input_thread.started.connect(self.input_worker.start_reading)
         self.input_worker.signal_to_main.connect(self.read_serial_input)
@@ -251,8 +256,8 @@ class SerialInputWorker(QtCore.QObject):
     @QtCore.pyqtSlot()
     def start_reading(self):
         while True:
-            if port_input is not None:
-                serial_input = port_input.read()
+            if self.port_input is not None:
+                serial_input = self.port_input.read()
                 if serial_input != b'':
                     self.signal_to_main.emit(unpack('>B', serial_input))
 
