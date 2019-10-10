@@ -13,7 +13,7 @@ class SerialThreading(object):
     def __init__(self):
         self.triggers_log = Path('triggers.log').resolve()
 
-        self.port_trigger = serial_for_url('loop://', timeout=0)
+        self.port_trigger = serial_for_url('loop://', timeout=0.1)
         print(self.port_trigger)
         if not self.port_trigger.is_open:
             self.port_trigger.open()
