@@ -15,13 +15,12 @@ from serial import Serial
 from serial import SerialException
 from datetime import datetime
 
+from .parameters import PARAMETERS as P
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 IMAGES_DIR = SCRIPT_DIR / 'images'
-STIMULI_TSV = str(IMAGES_DIR / 'template_task-prf_random.tsv')
+STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
 
-COM_PORT_TRIGGER = 'COM9'
-COM_PORT_INPUT = 'COM8'
-BAUDRATE = 9600
 QTIMER_INTERVAL = 1
 
 logname = Path(f'log_{datetime.now():%Y%m%d_%H%M%S}.txt').resolve()
@@ -52,7 +51,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
         if port_trigger is None:
             try:
-                port_trigger = Serial(COM_PORT_TRIGGER, baudrate=BAUDRATE)
+                port_trigger = Serial(P['COM']['TRIGGER']['PORT'], baudrate=P['COM']['TRIGGER']['BAUDRATE'])
             except SerialException:
                 port_trigger = None
                 lg.warning('could not open serial port for triggers')
@@ -60,7 +59,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
         if port_input is None:
             try:
-                port_input = Serial(COM_PORT_INPUT, baudrate=BAUDRATE)
+                port_input = Serial(P['COM']['INPUT']['PORT'], baudrate=P['COM']['INPUT']['BAUDRATE'])
             except SerialException:
                 port_input = None
                 lg.warning('could not open serial port to read input')
@@ -173,7 +172,7 @@ class PrettyWidget(QtWidgets.QLabel):
     def start(self):
         self.started = True
         self.time.start()
-        self.timer.start(QTIMER_INTERVAL)
+        self.timer.start(P['QTIMER_INTERVAL'])
         self.start_serial_input()
 
     def start_serial_input(self):
