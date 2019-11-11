@@ -33,7 +33,7 @@ logging.basicConfig(
     level=logging.DEBUG)
 logging.info("Log File")
 
-lg = logging.getLogger('prf')
+lg = logging.getLogger('qttask')
 lg.addHandler(logging.StreamHandler())
 
 

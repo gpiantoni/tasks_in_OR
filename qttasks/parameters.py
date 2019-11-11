@@ -10,5 +10,5 @@ PARAMETERS = {
             },
         },
     'QTIMER_INTERVAL': 1,
-    'TASK_TSV': 'template_task-prf_random.tsv',
+    'TASK_TSV': 'template_task-fingermapping_right.tsv',
     }
