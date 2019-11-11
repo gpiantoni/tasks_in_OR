@@ -1,82 +1,82 @@
 onset	duration	trial_type	trial_name	stim_file	stim_file_index
-0	15.305	20	open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-15.305	5.102	21	little close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-20.407	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-25.508	5.085	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-30.593	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-35.695	15.305	25	thumb close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-51	5.102	26	thumb open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-56.102	5.102	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-61.203	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-66.305	5.102	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-71.407	15.288	30	little open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-86.695	5.102	31	thumb close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-91.797	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-96.898	5.102	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-102	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-107.102	15.305	32	pinky close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-122.407	5.102	33	pinky open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-127.508	5.085	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-132.593	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-137.695	5.102	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-142.797	15.305	35	thumb open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-158.102	5.102	21	little close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-163.203	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-168.305	5.102	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-173.407	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-178.508	15.288	25	thumb close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-193.797	5.102	26	thumb open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-198.898	5.102	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-204	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-209.102	5.102	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-214.203	15.305	30	little open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-229.508	5.085	31	thumb close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-234.593	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-239.695	5.102	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-244.797	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-249.898	15.305	32	pinky close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-265.203	5.102	33	pinky open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-270.305	5.102	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-275.407	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-280.508	5.085	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-285.593	15.305	35	thumb open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-300.898	5.102	21	little close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-306	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-311.102	5.102	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-316.203	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-321.305	15.288	25	thumb close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-336.593	5.102	26	thumb open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-341.695	5.102	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-346.797	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-351.898	5.102	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-357	15.305	30	little open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-372.305	5.102	31	thumb close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-377.407	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-382.508	5.085	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-387.593	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-392.695	15.305	32	pinky close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-408	5.102	33	pinky open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-413.102	5.102	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-418.203	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-423.305	5.102	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-428.407	15.288	35	thumb open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-443.695	5.102	21	little close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-448.797	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-453.898	5.102	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-459	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-464.102	15.305	25	thumb close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-479.407	5.102	26	thumb open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	5
-484.508	5.085	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	4
-489.593	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	3
-494.695	5.102	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	2
-499.797	15.305	30	little open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
-515.102	5.102	31	thumb close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-520.203	5.102	24	index close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-525.305	5.102	23	middle close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-530.407	5.102	22	ring close	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-535.508	15.288	32	pinky close closed palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	6
-550.797	5.102	33	pinky open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	10
-555.898	5.102	29	ring open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	9
-561	5.102	28	middle open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	8
-566.102	5.102	27	index open	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	7
-571.203	15.305	35	thumb open open palm	sub-intraop013_ses-umc7t01_task-fingermappingright_run-1.mat	1
+0	15.305	20	open palm	fingermapping_right/stim_001.png	1
+15.305	5.102	21	little close	fingermapping_right/stim_002.png	2
+20.407	5.102	22	ring close	fingermapping_right/stim_003.png	3
+25.508	5.085	23	middle close	fingermapping_right/stim_004.png	4
+30.593	5.102	24	index close	fingermapping_right/stim_005.png	5
+35.695	15.305	25	thumb close closed palm	fingermapping_right/stim_006.png	6
+51	5.102	26	thumb open	fingermapping_right/stim_005.png	5
+56.102	5.102	27	index open	fingermapping_right/stim_004.png	4
+61.203	5.102	28	middle open	fingermapping_right/stim_003.png	3
+66.305	5.102	29	ring open	fingermapping_right/stim_002.png	2
+71.407	15.288	30	little open open palm	fingermapping_right/stim_001.png	1
+86.695	5.102	31	thumb close	fingermapping_right/stim_007.png	7
+91.797	5.102	24	index close	fingermapping_right/stim_008.png	8
+96.898	5.102	23	middle close	fingermapping_right/stim_009.png	9
+102	5.102	22	ring close	fingermapping_right/stim_010.png	10
+107.102	15.305	32	pinky close closed palm	fingermapping_right/stim_006.png	6
+122.407	5.102	33	pinky open	fingermapping_right/stim_010.png	10
+127.508	5.085	29	ring open	fingermapping_right/stim_009.png	9
+132.593	5.102	28	middle open	fingermapping_right/stim_008.png	8
+137.695	5.102	27	index open	fingermapping_right/stim_007.png	7
+142.797	15.305	35	thumb open open palm	fingermapping_right/stim_001.png	1
+158.102	5.102	21	little close	fingermapping_right/stim_002.png	2
+163.203	5.102	22	ring close	fingermapping_right/stim_003.png	3
+168.305	5.102	23	middle close	fingermapping_right/stim_004.png	4
+173.407	5.102	24	index close	fingermapping_right/stim_005.png	5
+178.508	15.288	25	thumb close closed palm	fingermapping_right/stim_006.png	6
+193.797	5.102	26	thumb open	fingermapping_right/stim_005.png	5
+198.898	5.102	27	index open	fingermapping_right/stim_004.png	4
+204	5.102	28	middle open	fingermapping_right/stim_003.png	3
+209.102	5.102	29	ring open	fingermapping_right/stim_002.png	2
+214.203	15.305	30	little open open palm	fingermapping_right/stim_001.png	1
+229.508	5.085	31	thumb close	fingermapping_right/stim_007.png	7
+234.593	5.102	24	index close	fingermapping_right/stim_008.png	8
+239.695	5.102	23	middle close	fingermapping_right/stim_009.png	9
+244.797	5.102	22	ring close	fingermapping_right/stim_010.png	10
+249.898	15.305	32	pinky close closed palm	fingermapping_right/stim_006.png	6
+265.203	5.102	33	pinky open	fingermapping_right/stim_010.png	10
+270.305	5.102	29	ring open	fingermapping_right/stim_009.png	9
+275.407	5.102	28	middle open	fingermapping_right/stim_008.png	8
+280.508	5.085	27	index open	fingermapping_right/stim_007.png	7
+285.593	15.305	35	thumb open open palm	fingermapping_right/stim_001.png	1
+300.898	5.102	21	little close	fingermapping_right/stim_002.png	2
+306	5.102	22	ring close	fingermapping_right/stim_003.png	3
+311.102	5.102	23	middle close	fingermapping_right/stim_004.png	4
+316.203	5.102	24	index close	fingermapping_right/stim_005.png	5
+321.305	15.288	25	thumb close closed palm	fingermapping_right/stim_006.png	6
+336.593	5.102	26	thumb open	fingermapping_right/stim_005.png	5
+341.695	5.102	27	index open	fingermapping_right/stim_004.png	4
+346.797	5.102	28	middle open	fingermapping_right/stim_003.png	3
+351.898	5.102	29	ring open	fingermapping_right/stim_002.png	2
+357	15.305	30	little open open palm	fingermapping_right/stim_001.png	1
+372.305	5.102	31	thumb close	fingermapping_right/stim_007.png	7
+377.407	5.102	24	index close	fingermapping_right/stim_008.png	8
+382.508	5.085	23	middle close	fingermapping_right/stim_009.png	9
+387.593	5.102	22	ring close	fingermapping_right/stim_010.png	10
+392.695	15.305	32	pinky close closed palm	fingermapping_right/stim_006.png	6
+408	5.102	33	pinky open	fingermapping_right/stim_010.png	10
+413.102	5.102	29	ring open	fingermapping_right/stim_009.png	9
+418.203	5.102	28	middle open	fingermapping_right/stim_008.png	8
+423.305	5.102	27	index open	fingermapping_right/stim_007.png	7
+428.407	15.288	35	thumb open open palm	fingermapping_right/stim_001.png	1
+443.695	5.102	21	little close	fingermapping_right/stim_002.png	2
+448.797	5.102	22	ring close	fingermapping_right/stim_003.png	3
+453.898	5.102	23	middle close	fingermapping_right/stim_004.png	4
+459	5.102	24	index close	fingermapping_right/stim_005.png	5
+464.102	15.305	25	thumb close closed palm	fingermapping_right/stim_006.png	6
+479.407	5.102	26	thumb open	fingermapping_right/stim_005.png	5
+484.508	5.085	27	index open	fingermapping_right/stim_004.png	4
+489.593	5.102	28	middle open	fingermapping_right/stim_003.png	3
+494.695	5.102	29	ring open	fingermapping_right/stim_002.png	2
+499.797	15.305	30	little open open palm	fingermapping_right/stim_001.png	1
+515.102	5.102	31	thumb close	fingermapping_right/stim_007.png	7
+520.203	5.102	24	index close	fingermapping_right/stim_008.png	8
+525.305	5.102	23	middle close	fingermapping_right/stim_009.png	9
+530.407	5.102	22	ring close	fingermapping_right/stim_010.png	10
+535.508	15.288	32	pinky close closed palm	fingermapping_right/stim_006.png	6
+550.797	5.102	33	pinky open	fingermapping_right/stim_010.png	10
+555.898	5.102	29	ring open	fingermapping_right/stim_009.png	9
+561	5.102	28	middle open	fingermapping_right/stim_008.png	8
+566.102	5.102	27	index open	fingermapping_right/stim_007.png	7
+571.203	15.305	35	thumb open open palm	fingermapping_right/stim_001.png	1

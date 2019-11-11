@@ -16,8 +16,8 @@ from serial import SerialException
 from datetime import datetime
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-IMAGES_DIR = SCRIPT_DIR / 'images/prf'
-STIMULI_TSV = str(SCRIPT_DIR / 'images/template_task-prf_random.tsv')
+IMAGES_DIR = SCRIPT_DIR / 'images'
+STIMULI_TSV = str(IMAGES_DIR / 'template_task-prf_random.tsv')
 
 COM_PORT_TRIGGER = 'COM9'
 COM_PORT_INPUT = 'COM8'
