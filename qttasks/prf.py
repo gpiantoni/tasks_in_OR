@@ -128,6 +128,9 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def drawText(self, event, qp):
 
+        if not P['FIXATION']['ACTIVE']:
+            return
+
         elapsed = self.time.elapsed() + self.delay
         if elapsed > self.cross_delay:
             if self.cross_color == 'green':

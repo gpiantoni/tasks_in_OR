@@ -10,5 +10,8 @@ PARAMETERS = {
             },
         },
     'QTIMER_INTERVAL': 1,
-    'TASK_TSV': 'template_task-fingermapping_right.tsv',
+    'FIXATION': {
+        'ACTIVE': False,
+        },
+    'TASK_TSV': 'template_task-words.tsv',
     }
