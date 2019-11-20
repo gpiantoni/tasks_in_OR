@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtMultimedia import QSound
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent
 from PyQt5.QtCore import Qt
@@ -45,6 +46,10 @@ class PrettyWidget(QtWidgets.QLabel):
     delay = 0  # used when pausing
     cross_delay = 2
     cross_color = 'green'
+    if P['SOUND'] is not None:
+        sound = QSound(P['SOUND'])
+    else:
+        sound = None
 
     def __init__(self, port_trigger=None, port_input=None):
         super().__init__()
@@ -177,6 +182,8 @@ class PrettyWidget(QtWidgets.QLabel):
         self.time.start()
         self.timer.start(P['QTIMER_INTERVAL'])
         self.start_serial_input()
+        if self.sound is not None:
+            self.sound.play()
 
     def start_serial_input(self):
         self.input_worker = SerialInputWorker()
@@ -196,6 +203,8 @@ class PrettyWidget(QtWidgets.QLabel):
 
         self.serial(251)
         self.serial(None)
+        if self.sound is not None:
+            self.sound.play()
 
         if self.timer is not None:
             self.timer.stop()

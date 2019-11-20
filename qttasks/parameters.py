@@ -13,5 +13,6 @@ PARAMETERS = {
     'FIXATION': {
         'ACTIVE': False,
         },
+    'SOUND': None,
     'TASK_TSV': 'template_task-words.tsv',
     }
