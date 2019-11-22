@@ -22,8 +22,6 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 IMAGES_DIR = SCRIPT_DIR / 'images'
 STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
 
-QTIMER_INTERVAL = 1
-
 logname = Path(f'log_{datetime.now():%Y%m%d_%H%M%S}.txt').resolve()
 
 logging.basicConfig(
@@ -224,7 +222,7 @@ class PrettyWidget(QtWidgets.QLabel):
             self.time.restart()
             self.serial(254)
             lg.info('Pause finished: restarting the task')
-            self.timer.start(QTIMER_INTERVAL)
+            self.timer.start(P['QTIMER_INTERVAL'])
         self.update()
 
     def keyPressEvent(self, event):
@@ -249,10 +247,19 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def mouseDoubleClickEvent(self, event):
         if isinstance(event, QMouseEvent):
-            if self.isFullScreen():
-                self.showNormal()
+            if event.pos().x() > self.rect().center().x():
+
+                if not self.started:
+                    self.start()
+                else:
+                    self.pause()
+
             else:
-                self.showFullScreen()
+                if self.isFullScreen():
+                    self.showNormal()
+                else:
+                    self.showFullScreen()
+
         else:
             super().mouseDoubleClickEvent(event)
 
