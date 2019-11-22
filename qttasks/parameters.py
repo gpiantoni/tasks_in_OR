@@ -15,8 +15,8 @@ PARAMETERS = {
         },
     'SOUND': {
         'PLAY': True,
-        'START': 'sounds/S8_part1.wav',
-        'END': 'sounds/S8_part2.wav',
+        'START': 'S8_part1.wav',
+        'END': 'S8_part2.wav',
         },
     'TASK_TSV': 'template_task-words.tsv',
     }

@@ -21,6 +21,7 @@ from .parameters import PARAMETERS as P
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 IMAGES_DIR = SCRIPT_DIR / 'images'
+SOUNDS_DIR = SCRIPT_DIR / 'sounds'
 STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
 
 logname = Path(f'log_{datetime.now():%Y%m%d_%H%M%S}.txt').resolve()
@@ -47,8 +48,8 @@ class PrettyWidget(QtWidgets.QLabel):
     cross_color = 'green'
     if P['SOUND']['PLAY']:
         sound = {
-            'start': QSound(P['SOUND']['START']),
-            'end': QSound(P['SOUND']['END']),
+            'start': QSound(str(SOUNDS_DIR / P['SOUND']['START'])),
+            'end': QSound(str(SOUNDS_DIR / P['SOUND']['END'])),
             }
     else:
         sound = {'start': None, 'end': None}
@@ -320,7 +321,7 @@ def _convert_stimuli():
 
 
 def _warn_about_ports():
-    port_names = sorted([x.name for x in comports()])
+    port_names = sorted([x.device for x in comports()])
     if len(port_names) > 0:
         ports = ', '.join(port_names)
         lg.warning(f'Available ports are {ports}')
