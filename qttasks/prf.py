@@ -14,6 +14,7 @@ from numpy import where, genfromtxt, zeros, dtype
 from pathlib import Path
 from serial import Serial
 from serial import SerialException
+from serial.tools.list_ports import comports
 from datetime import datetime
 
 from .parameters import PARAMETERS as P
@@ -44,10 +45,13 @@ class PrettyWidget(QtWidgets.QLabel):
     delay = 0  # used when pausing
     cross_delay = 2
     cross_color = 'green'
-    if P['SOUND'] is not None:
-        sound = QSound(P['SOUND'])
+    if P['SOUND']['PLAY']:
+        sound = {
+            'start': QSound(P['SOUND']['START']),
+            'end': QSound(P['SOUND']['END']),
+            }
     else:
-        sound = None
+        sound = {'start': None, 'end': None}
 
     def __init__(self, port_trigger=None, port_input=None):
         super().__init__()
@@ -58,6 +62,8 @@ class PrettyWidget(QtWidgets.QLabel):
             except SerialException:
                 port_trigger = None
                 lg.warning('could not open serial port for triggers')
+                _warn_about_ports()
+
         self.port_trigger = port_trigger
 
         if port_input is None:
@@ -66,6 +72,8 @@ class PrettyWidget(QtWidgets.QLabel):
             except SerialException:
                 port_input = None
                 lg.warning('could not open serial port to read input')
+                _warn_about_ports()
+
         self.port_input = port_input
 
         lg.info('Reading images')
@@ -180,8 +188,8 @@ class PrettyWidget(QtWidgets.QLabel):
         self.time.start()
         self.timer.start(P['QTIMER_INTERVAL'])
         self.start_serial_input()
-        if self.sound is not None:
-            self.sound.play()
+        if self.sound['start'] is not None:
+            self.sound['start'].play()
 
     def start_serial_input(self):
         self.input_worker = SerialInputWorker()
@@ -201,8 +209,9 @@ class PrettyWidget(QtWidgets.QLabel):
 
         self.serial(251)
         self.serial(None)
-        if self.sound is not None:
-            self.sound.play()
+
+        if self.sound['end'] is not None:
+            self.sound['end'].play()
 
         if self.timer is not None:
             self.timer.stop()
@@ -308,6 +317,15 @@ def _convert_stimuli():
         stimuli['pixmap'][stimuli['pixmap'] == png] = pixmap
 
     return stimuli
+
+
+def _warn_about_ports():
+    port_names = sorted([x.name for x in comports()])
+    if len(port_names) > 0:
+        ports = ', '.join(port_names)
+        lg.warning(f'Available ports are {ports}')
+    else:
+        lg.warning(f'No available ports')
 
 
 def main():

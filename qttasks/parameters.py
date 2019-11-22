@@ -1,11 +1,11 @@
 PARAMETERS = {
     'COM': {
         'TRIGGER': {
-            'PORT': 'COM9',
-            'BAUDRATE': 9600,
+            'PORT': 'COM6',
+            'BAUDRATE': 115200,
             },
         'INPUT': {
-            'PORT': 'COM8',
+            'PORT': 'COM7',
             'BAUDRATE': 9600,
             },
         },
@@ -13,6 +13,10 @@ PARAMETERS = {
     'FIXATION': {
         'ACTIVE': False,
         },
-    'SOUND': None,
+    'SOUND': {
+        'PLAY': True,
+        'START': 'sounds/S8_part1.wav',
+        'END': 'sounds/S8_part2.wav',
+        },
     'TASK_TSV': 'template_task-words.tsv',
     }
