@@ -358,11 +358,17 @@ def main():
         nargs='?',
         help='json file with the parameters')
     args = parser.parse_args()
- 
+    
+    defaults_json = SCRIPT_DIR / 'default.json'
+    with defaults_json.open() as f:
+        PARAMETERS = load(f)
+    
     parameter_json = SCRIPT_DIR / args.parameters
     parameter_json = parameter_json.with_suffix('.json')
     with parameter_json.open() as f:
-        PARAMETERS = load(f)
+        CHANGES = load(f)
+        
+    PARAMETERS.update(CHANGES)
  
     lg.debug(pformat(PARAMETERS))
     w = PrettyWidget(PARAMETERS)
