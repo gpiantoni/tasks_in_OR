@@ -18,5 +18,5 @@ PARAMETERS = {
         'START': 'S8_part1.wav',
         'END': 'S8_part2.wav',
         },
-    'TASK_TSV': 'template_task-words.tsv',
+    'TASK_TSV': 'template_task-syllables.tsv',
     }
