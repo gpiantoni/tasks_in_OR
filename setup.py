@@ -36,7 +36,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'qttasks=qttasks.prf:main',
+            'qttasks=qttasks.presentation:main',
         ],
     },
 )

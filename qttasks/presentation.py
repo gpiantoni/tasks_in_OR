@@ -10,6 +10,7 @@ from struct import pack, unpack
 import logging
 
 from random import random
+from json import load
 from numpy import where, genfromtxt, zeros, dtype
 from pathlib import Path
 from serial import Serial
@@ -17,14 +18,16 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 from datetime import datetime
 
-from qttasks.parameters import PARAMETERS as P
-
 SCRIPT_DIR = Path(__file__).resolve().parent
 IMAGES_DIR = SCRIPT_DIR / 'images'
 SOUNDS_DIR = SCRIPT_DIR / 'sounds'
-STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
+LOG_DIR = SCRIPT_DIR / 'log'
 
-logname = Path(f'log_{datetime.now():%Y%m%d_%H%M%S}.txt').resolve()
+with open(SCRIPT_DIR / 'parameters.json') as f:
+    P = load(f)
+STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])	
+	
+logname = LOG_DIR / f'log_{datetime.now():%Y%m%d_%H%M%S}.txt'
 
 logging.basicConfig(
     filename=logname,
