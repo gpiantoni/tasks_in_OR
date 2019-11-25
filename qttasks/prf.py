@@ -17,7 +17,7 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 from datetime import datetime
 
-from .parameters import PARAMETERS as P
+from qttasks.parameters import PARAMETERS as P
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 IMAGES_DIR = SCRIPT_DIR / 'images'
@@ -113,28 +113,33 @@ class PrettyWidget(QtWidgets.QLabel):
         qp.begin(self)
 
         if self.paused:
-            self.draw_pause(event, qp)
+            self.draw_text(event, qp, 'PAUSED')
 
+        elif self.current_index is None:
+            self.draw_text(event, qp, 'READY')
         else:
+
             window_rect = event.rect()
             rect_x = window_rect.center().x()
             rect_y = window_rect.center().y()
-            if self.current_index is not None:
-                current_pixmap = self.stimuli['pixmap'][self.current_index]
-                if current_pixmap is not None:
-                    image_rect = current_pixmap.rect()
+            
+            current_pixmap = self.stimuli['pixmap'][self.current_index]
+            if current_pixmap is None:
+                self.draw_text(event, qp, '+')
+            else:
+                image_rect = current_pixmap.rect()
 
-                    size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
-                    img_origin_x = rect_x - int(size.width() / 2)
-                    img_origin_y = rect_y - int(size.height() / 2)
-                    qp.drawPixmap(
+                size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
+                img_origin_x = rect_x - int(size.width() / 2)
+                img_origin_y = rect_y - int(size.height() / 2)
+                qp.drawPixmap(
                         img_origin_x,
                         img_origin_y,
                         size.width(),
                         size.height(),
                         current_pixmap)
 
-            self.drawText(event, qp)
+        self.drawText(event, qp)
 
         qp.end()
 
@@ -158,11 +163,11 @@ class PrettyWidget(QtWidgets.QLabel):
         qp.setFont(QtGui.QFont('Decorative', 80))
         qp.drawText(event.rect(), Qt.AlignCenter, '+')
 
-    def draw_pause(self, event, qp):
+    def draw_text(self, event, qp, text):
 
-        qp.setPen(QtGui.QColor(168, 34, 3))
+        qp.setPen(QtGui.QColor(168, 10, 150 ))
         qp.setFont(QtGui.QFont('Decorative', 50))
-        qp.drawText(event.rect(), Qt.AlignCenter, 'PAUSED')
+        qp.drawText(event.rect(), Qt.AlignCenter, text)
 
     def check_time(self):
 
