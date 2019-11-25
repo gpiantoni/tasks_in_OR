@@ -137,7 +137,6 @@ class PrettyWidget(QtWidgets.QLabel):
                 if current_pixmap == 'DONE':
                     if not self.finished:
                         self.finished = True
-                        self.serial(251)
                         self.serial(None)
                         if self.sound['end'] is not None:
                             self.sound['end'].play()
@@ -326,8 +325,7 @@ def _convert_stimuli():
     stimuli['onset'][-2] = stimuli['onset'][-3] + P['OUTRO']
     stimuli['onset'][-1] = stimuli['onset'][-2] + 1
     stimuli['onset'] *= 1000  # s -> ms
-    stimuli['trigger'][1:-2:2] = tsv['trial_type']
-
+    
     # read images only once
     stimuli['pixmap'] = None
     stimuli['pixmap'][1:-2:2] = tsv['stim_file']
@@ -336,6 +334,9 @@ def _convert_stimuli():
         stimuli['pixmap'][stimuli['pixmap'] == png] = pixmap
     stimuli['pixmap'][::2] = P['BASELINE']
     stimuli['pixmap'][-2] = 'DONE'
+    
+    stimuli['trigger'][1:-2:2] = tsv['trial_type']
+    stimuli['trigger'][-2] = 251
     
     return stimuli
 
