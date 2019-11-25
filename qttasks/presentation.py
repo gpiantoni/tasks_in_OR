@@ -99,6 +99,10 @@ class PrettyWidget(QtWidgets.QLabel):
 
         self.setCursor(Qt.BlankCursor)
         self.setGeometry(200, 200, 1000, 1000)
+        if self.P['FULLSCREEN']:
+            self.showFullScreen()
+        else:
+            self.showNormal()
         self.serial(250)
 
     def serial(self, trigger):
@@ -262,8 +266,15 @@ class PrettyWidget(QtWidgets.QLabel):
                 self.pause()
 
             elif event.key() == Qt.Key_Escape:
+                self.serial(255)
                 self.stop()
 
+            elif event.key() == Qt.Key_PageUp:
+                self.showFullScreen()
+                
+            elif event.key() == Qt.Key_PageDown:
+                self.showNormal()
+                
             else:
                 super().keyPressEvent(event)
         else:
