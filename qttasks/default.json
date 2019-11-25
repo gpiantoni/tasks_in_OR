@@ -14,7 +14,7 @@
   "ACTIVE": false
   },
 "BASELINE": "+",
-"FULLSCREEN": false,
+"FULLSCREEN": true,
 "SOUND": {
   "PLAY": true,
   "START": "S8_part1.wav",
