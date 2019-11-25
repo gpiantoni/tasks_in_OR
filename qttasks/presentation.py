@@ -9,7 +9,9 @@ import sys
 from struct import pack, unpack
 import logging
 
+from argparse import ArgumentParser
 from random import random
+from pprint import pformat
 from json import load
 from numpy import where, genfromtxt, zeros, dtype
 from pathlib import Path
@@ -24,10 +26,6 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 IMAGES_DIR = SCRIPT_DIR / 'images'
 SOUNDS_DIR = SCRIPT_DIR / 'sounds'
 LOG_DIR = SCRIPT_DIR / 'log'
-
-with open(SCRIPT_DIR / 'parameters_short.json') as f:
-    P = load(f)
-STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])	
 	
 logname = LOG_DIR / f'log_{datetime.now():%Y%m%d_%H%M%S}.txt'
 
@@ -52,39 +50,40 @@ class PrettyWidget(QtWidgets.QLabel):
     delay = 0  # used when pausing
     cross_delay = 2
     cross_color = 'green'
-    if P['SOUND']['PLAY']:
-        sound = {
-            'start': QSound(str(SOUNDS_DIR / P['SOUND']['START'])),
-            'end': QSound(str(SOUNDS_DIR / P['SOUND']['END'])),
-            }
-    else:
-        sound = {'start': None, 'end': None}
+    sound = {'start': None, 'end': None}
 
-    def __init__(self, port_trigger=None, port_input=None):
+    def __init__(self, parameters):
         super().__init__()
+        self.P = parameters
 
-        if port_trigger is None:
-            try:
-                port_trigger = Serial(P['COM']['TRIGGER']['PORT'], baudrate=P['COM']['TRIGGER']['BAUDRATE'])
-            except SerialException:
-                port_trigger = None
-                lg.warning('could not open serial port for triggers')
-                _warn_about_ports()
+        if self.P['SOUND']['PLAY']:
+            self.sound = {
+                'start': QSound(str(SOUNDS_DIR / self.P['SOUND']['START'])),
+                'end': QSound(str(SOUNDS_DIR / self.P['SOUND']['END'])),
+                }
 
+        try:
+            port_trigger = Serial(
+                self.P['COM']['TRIGGER']['PORT'], 
+                baudrate=self.P['COM']['TRIGGER']['BAUDRATE'])
+        except SerialException:
+            port_trigger = None
+            lg.warning('could not open serial port for triggers')
+            _warn_about_ports()
         self.port_trigger = port_trigger
 
-        if port_input is None:
-            try:
-                port_input = Serial(P['COM']['INPUT']['PORT'], baudrate=P['COM']['INPUT']['BAUDRATE'])
-            except SerialException:
-                port_input = None
-                lg.warning('could not open serial port to read input')
-                _warn_about_ports()
-
+        try:
+            port_input = Serial(
+                self.P['COM']['INPUT']['PORT'], 
+                baudrate=self.P['COM']['INPUT']['BAUDRATE'])
+        except SerialException:
+            port_input = None
+            lg.warning('could not open serial port to read input')
+            _warn_about_ports()
         self.port_input = port_input
 
         lg.info('Reading images')
-        self.stimuli = _convert_stimuli()
+        self.stimuli = _convert_stimuli(self.P)
         lg.info('Reading images: finished')
 
         # background color
@@ -160,7 +159,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def drawText(self, event, qp):
 
-        if not P['FIXATION']['ACTIVE']:
+        if not self.P['FIXATION']['ACTIVE']:
             return
 
         elapsed = self.time.elapsed() + self.delay
@@ -208,7 +207,7 @@ class PrettyWidget(QtWidgets.QLabel):
         self.started = True
         self.current_index = -1
         self.time.start()
-        self.timer.start(P['QTIMER_INTERVAL'])
+        self.timer.start(self.P['QTIMER_INTERVAL'])
         # self.start_serial_input()
         if self.sound['start'] is not None:
             self.sound['start'].play()
@@ -247,7 +246,7 @@ class PrettyWidget(QtWidgets.QLabel):
             self.time.restart()
             self.serial(254)
             lg.info('Pause finished: restarting the task')
-            self.timer.start(P['QTIMER_INTERVAL'])
+            self.timer.start(self.P['QTIMER_INTERVAL'])
         self.update()
 
     def keyPressEvent(self, event):
@@ -304,8 +303,9 @@ class SerialInputWorker(QtCore.QObject):
                     self.signal_to_main.emit(unpack('>B', serial_input))
 
 
-def _convert_stimuli():
+def _convert_stimuli(P):
 
+    STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
     tsv = genfromtxt(
         fname=STIMULI_TSV,
         delimiter='\t',
@@ -351,9 +351,24 @@ def _warn_about_ports():
 
 
 def main():
-    w = PrettyWidget()
+
+    parser = ArgumentParser(prog='presentation')
+    parser.add_argument(
+        'parameters', 
+        nargs='?',
+        help='json file with the parameters')
+    args = parser.parse_args()
+ 
+    parameter_json = SCRIPT_DIR / args.parameters
+    parameter_json = parameter_json.with_suffix('.json')
+    with parameter_json.open() as f:
+        PARAMETERS = load(f)
+ 
+    lg.debug(pformat(PARAMETERS))
+    w = PrettyWidget(PARAMETERS)
     app.exec()
 
 
 if __name__ == '__main__':
+
     main()
