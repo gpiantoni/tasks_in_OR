@@ -13,11 +13,12 @@
 "FIXATION": {
   "ACTIVE": false
   },
+"BASELINE": "+",
 "SOUND": {
   "PLAY": true,
   "START": "S8_part1.wav",
   "END": "S8_part2.wav"
   },
-"TASK_TSV": "template_task-jip.tsv",
-"OUTRO": 3
+"TASK_TSV": "template_task-short.tsv",
+"OUTRO": 2
 }
