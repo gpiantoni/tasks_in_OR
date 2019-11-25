@@ -45,6 +45,7 @@ class PrettyWidget(QtWidgets.QLabel):
     started = False
     finished = False
     timer = None
+    port_trigger = None
     current_index = None
     paused = False
     delay = 0  # used when pausing
@@ -61,16 +62,7 @@ class PrettyWidget(QtWidgets.QLabel):
                 'start': QSound(str(SOUNDS_DIR / self.P['SOUND']['START'])),
                 'end': QSound(str(SOUNDS_DIR / self.P['SOUND']['END'])),
                 }
-
-        try:
-            port_trigger = Serial(
-                self.P['COM']['TRIGGER']['PORT'], 
-                baudrate=self.P['COM']['TRIGGER']['BAUDRATE'])
-        except SerialException:
-            port_trigger = None
-            lg.warning('could not open serial port for triggers')
-            _warn_about_ports()
-        self.port_trigger = port_trigger
+        self.open_serial()
 
         try:
             port_input = Serial(
@@ -105,6 +97,15 @@ class PrettyWidget(QtWidgets.QLabel):
             self.showNormal()
         self.serial(250)
 
+    def open_serial(self):
+        try:
+            self.port_trigger = Serial(
+                self.P['COM']['TRIGGER']['PORT'], 
+                baudrate=self.P['COM']['TRIGGER']['BAUDRATE'])
+        except SerialException:
+            lg.warning('could not open serial port for triggers')
+            _warn_about_ports()
+
     def serial(self, trigger):
         """trigger needs to be between 0 and 255. If none, then it closes the
         serial port"""
@@ -114,7 +115,11 @@ class PrettyWidget(QtWidgets.QLabel):
         else:
             lg.info(f'Sending trigger {trigger:03d}')
             if self.port_trigger is not None:
-                self.port_trigger.write(pack('>B', trigger))
+                try:
+                    self.port_trigger.write(pack('>B', trigger))
+                except:
+                    lg.warning('could not write to serial port')
+                    self.open_serial()
 
     def paintEvent(self, event):
 
