@@ -188,7 +188,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def draw_text(self, event, qp, text):
 
-        qp.setPen(QtGui.QColor(168, 10, 150 ))
+        qp.setPen(QtGui.QColor(40, 40, 255 ))
         qp.setFont(QtGui.QFont('Decorative', 50))
         qp.drawText(event.rect(), Qt.AlignCenter, text)
 
