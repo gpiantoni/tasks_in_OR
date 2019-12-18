@@ -41,6 +41,23 @@ lg = logging.getLogger('qttask')
 lg.addHandler(logging.StreamHandler())
 
 
+def read_mic():
+    from PyQt5.QtMultimedia import QAudioRecorder, QAudioEncoderSettings, QMultimedia
+    from PyQt5.QtCore import QUrl
+
+    audioRecorder = QAudioRecorder()
+
+    audioSettings = QAudioEncoderSettings()
+    audioSettings.setCodec("audio/amr")  #  check codec
+    audioSettings.setQuality(QMultimedia.HighQuality);
+    audioRecorder.setEncodingSettings(audioSettings);
+
+    audioRecorder.setOutputLocation(QUrl.fromLocalFile(r"C:\Users\gpianton\Programs\Github\tasks_in_OR\qttasks\sounds"))
+
+    audioRecorder.record()
+    # wait
+    audioRecorder.stop()
+
 class PrettyWidget(QtWidgets.QLabel):
     started = False
     finished = False
@@ -218,6 +235,7 @@ class PrettyWidget(QtWidgets.QLabel):
         self.time.start()
         self.timer.start(self.P['QTIMER_INTERVAL'])
         # self.start_serial_input()
+        # HERE: start recording from mic
         if self.sound['start'] is not None:
             self.sound['start'].play()
 
@@ -236,6 +254,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def stop(self):
         lg.info('Stopping task')
+        # HERE: stop recording from mic
 
         if self.timer is not None:
             self.timer.stop()
