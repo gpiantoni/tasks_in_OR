@@ -1,4 +1,4 @@
 qttasks.egg-info/
 */__pycache__/
-log_*.txt
+qttasks/log/log_*
 *.ipynb

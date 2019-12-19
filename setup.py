@@ -17,21 +17,15 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     keywords='tasks qt',
-    packages=find_packages(exclude=('test', )),
+    packages=find_packages(),
     install_requires=[
         'numpy',
-        'pyserial',
+        'PyQt5',
         ],
     package_data={
         'qttasks': [
             'images/*.tsv',
-            'images/prf/*.png',
-            ],
-    },
-    extras_require={
-        'tests': [
-            'pytest',
-            'pytest-qt',
+            'images/*/*.png',
             ],
     },
     entry_points={
