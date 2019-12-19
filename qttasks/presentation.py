@@ -36,7 +36,7 @@ logging.info("Log File")
 lg = logging.getLogger('qttask')
 lg.addHandler(logging.StreamHandler())
 
-micname = logname.with_suffix('.flac')
+micname = logname.with_suffix('.wav')
 
 
 class PrettyWidget(QtWidgets.QLabel):

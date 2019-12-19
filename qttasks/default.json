@@ -11,7 +11,7 @@
   "END": "S8_part2.wav"
   },
 "MICROPHONE": {
-  "CODEC": "audio/x-flac"
+  "CODEC": "audio/pcm"
   },
 "TASK_TSV": "template_task-short.tsv",
 "OUTRO": 2
