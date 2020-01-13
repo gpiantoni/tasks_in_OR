@@ -104,7 +104,7 @@ class PrettyWidget(QtWidgets.QLabel):
         
     def open_dataglove(self):
         lg.info('Opening dataglove')
-        DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.log')
+        DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.txt')
         self.glove = FiveDTGlove(DATAGLOVE_LOG)
         self.glove.open(b'USB0')
 
@@ -219,7 +219,7 @@ class PrettyWidget(QtWidgets.QLabel):
         
         if self.glove.new_data:
             glove_data = self.glove.get_sensor_raw_all()
-            self.glove.f.write('\t'.join([f'{x}' for x in glove_data]) + '\n')
+            self.glove.f.write(datetime.now().strftime('%H:%M:%S.%f') + '\t' + '\t'.join([f'{x}' for x in glove_data]) + '\n')
 
         index_image = where(self.stimuli['onset'] <= elapsed)[0]
         if len(index_image) == len(self.stimuli):
@@ -238,6 +238,7 @@ class PrettyWidget(QtWidgets.QLabel):
         self.update()
 
     def start(self):
+        lg.warning('Starting')
         self.started = True
         self.current_index = -1
         self.time.start()
