@@ -9,6 +9,8 @@ import sys
 from struct import pack, unpack
 import logging
 
+from functools import partial
+from ctypes import POINTER, c_int, CFUNCTYPE
 from argparse import ArgumentParser
 from random import random
 from pprint import pformat
@@ -19,6 +21,8 @@ from serial import Serial
 from serial import SerialException
 from serial.tools.list_ports import comports
 from datetime import datetime
+
+from .dataglove import FiveDTGlove, func
 
 app = QApplication([])
 
@@ -96,6 +100,23 @@ class PrettyWidget(QtWidgets.QLabel):
         else:
             self.showNormal()
         self.serial(250)
+        self.open_dataglove()
+        
+    def open_dataglove(self):
+        lg.info('Opening dataglove')
+        DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.log')
+        self.glove = FiveDTGlove(DATAGLOVE_LOG)
+        self.glove.open(b'USB0')
+
+    def start_dataglove(self):        
+        lg.info('Starting dataglove')
+        CMPFUNC = CFUNCTYPE(None, c_int)
+        c_func = CMPFUNC(partial(func, glove=self.glove))
+        self.glove.callback(c_func)
+        
+    def stop_dataglove(self):
+        lg.info('Stopping dataglove')
+        self.glove.remove_callback()
 
     def open_serial(self):
         try:
@@ -195,6 +216,10 @@ class PrettyWidget(QtWidgets.QLabel):
     def check_time(self):
 
         elapsed = self.time.elapsed() + self.delay
+        
+        if self.glove.new_data:
+            glove_data = self.glove.get_sensor_raw_all()
+            self.glove.f.write('\t'.join([f'{x}' for x in glove_data]) + '\n')
 
         index_image = where(self.stimuli['onset'] <= elapsed)[0]
         if len(index_image) == len(self.stimuli):
@@ -236,6 +261,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def stop(self):
         lg.info('Stopping task')
+        # self.stop_dataglove()
 
         if self.timer is not None:
             self.timer.stop()

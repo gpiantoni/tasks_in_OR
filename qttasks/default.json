@@ -2,7 +2,7 @@
 "COM": {
   "TRIGGER": {
     "PORT": "COM6",
-    "BAUDRATE": 115200
+    "BAUDRATE": 9600
     },
   "INPUT": {
     "PORT": "COM7",
@@ -14,7 +14,7 @@
   "ACTIVE": false
   },
 "BASELINE": "+",
-"FULLSCREEN": true,
+"FULLSCREEN": false,
 "SOUND": {
   "PLAY": true,
   "START": "S8_part1.wav",
