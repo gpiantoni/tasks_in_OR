@@ -248,9 +248,9 @@ class PrettyWidget(QtWidgets.QLabel):
         self.input_thread.start()
 
     def read_serial_input(self, number):
-        lg.input(f'Received input trigger {number}')
+        lg.info(f'Received input trigger {number}')
 
-        if self.P['COM']['INPUT']['START_TRIGGER'] == number:
+        if number > 100 and not self.started:
             self.start()
 
         self.serial(254)
