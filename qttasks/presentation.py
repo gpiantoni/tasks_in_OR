@@ -110,13 +110,11 @@ class PrettyWidget(QtWidgets.QLabel):
             self.open_dataglove()
 
     def open_dataglove(self):
-        try:
-            lg.info('Opening dataglove')
-            DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.txt')
-            self.glove = FiveDTGlove(DATAGLOVE_LOG)
-            self.glove.open(b'USB0')
-        except Exception as err:
-            lg.warning(err)
+
+        lg.info('Opening dataglove')
+        DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.txt')
+        self.glove = FiveDTGlove(DATAGLOVE_LOG)
+        self.glove.open(b'USB0')
 
     def open_serial(self):
         try:
