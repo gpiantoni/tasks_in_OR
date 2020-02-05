@@ -113,10 +113,16 @@ class PrettyWidget(QtWidgets.QLabel):
     def open_dataglove(self):
 
         lg.info('Opening dataglove')
-        for i in 
-        DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.txt')
-        self.glove = FiveDTGlove(DATAGLOVE_LOG)
-        self.glove.open(b'USB0')
+        self.glove = []
+        for i in range(5):  # TODO: we should use scan_USB but I get error
+            DATAGLOVE_LOG = logname.parent / (logname.stem + f'_dataglove{i}.txt')
+            new_glove = FiveDTGlove(DATAGLOVE_LOG)
+            try:
+                new_glove.open(f'USB{i}'.encode())
+            except IOError:
+                pass
+            else:
+                self.glove.append(new_glove)
 
     def open_serial(self):
         try:
@@ -217,9 +223,11 @@ class PrettyWidget(QtWidgets.QLabel):
 
         elapsed = self.time.elapsed() + self.delay
 
-        if self.P['DATAGLOVE'] and self.glove.new_data:
-            glove_data = self.glove.get_sensor_raw_all()
-            self.glove.f.write(datetime.now().strftime('%H:%M:%S.%f') + '\t' + '\t'.join([f'{x}' for x in glove_data]) + '\n')
+        if self.P['DATAGLOVE']:
+            for glove in self.glove:
+                if glove.new_data:
+                    glove_data = glove.get_sensor_raw_all()
+                    glove.f.write(datetime.now().strftime('%H:%M:%S.%f') + '\t' + '\t'.join([f'{x}' for x in glove_data]) + '\n')
 
         index_image = where(self.stimuli['onset'] <= elapsed)[0]
         if len(index_image) == len(self.stimuli):

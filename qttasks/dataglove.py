@@ -52,7 +52,6 @@ class FiveDTGlove:
     gloveDLL = cdll.LoadLibrary(str(SCRIPT_DIR / "include/fglove.dll"))
 
     def __init__(self, logfile):
-       
         if self.gloveDLL is None:
             raise IOError("Could not open fglove.dll")
         self.start = time.time()
