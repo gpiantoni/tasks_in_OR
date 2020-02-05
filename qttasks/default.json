@@ -6,7 +6,8 @@
     },
   "INPUT": {
     "PORT": "COM8",
-    "BAUDRATE": 9600
+    "BAUDRATE": 9600,
+    "START_TRIGGER": 49
     }
   },
 "QTIMER_INTERVAL": 1,
@@ -14,7 +15,8 @@
   "ACTIVE": false
   },
 "BASELINE": "+",
-"FULLSCREEN": true,
+"FULLSCREEN": false,
+"DATAGLOVE": false,
 "SOUND": {
   "PLAY": true,
   "START": "S8_part1.wav",

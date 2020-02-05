@@ -5,12 +5,9 @@ from PyQt5.QtMultimedia import QSound
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent
 from PyQt5.QtCore import Qt
-import sys
 from struct import pack, unpack
 import logging
 
-from functools import partial
-from ctypes import POINTER, c_int, CFUNCTYPE
 from argparse import ArgumentParser
 from random import random
 from pprint import pformat
@@ -22,7 +19,7 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 from datetime import datetime
 
-from .dataglove import FiveDTGlove, func
+from .dataglove import FiveDTGlove
 
 app = QApplication([])
 
@@ -30,7 +27,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 IMAGES_DIR = SCRIPT_DIR / 'images'
 SOUNDS_DIR = SCRIPT_DIR / 'sounds'
 LOG_DIR = SCRIPT_DIR / 'log'
-	
+
 logname = LOG_DIR / f'log_{datetime.now():%Y%m%d_%H%M%S}.txt'
 
 logging.basicConfig(
@@ -70,13 +67,14 @@ class PrettyWidget(QtWidgets.QLabel):
 
         try:
             port_input = Serial(
-                self.P['COM']['INPUT']['PORT'], 
+                self.P['COM']['INPUT']['PORT'],
                 baudrate=self.P['COM']['INPUT']['BAUDRATE'])
         except SerialException:
             port_input = None
             lg.warning('could not open serial port to read input')
             _warn_about_ports()
         self.port_input = port_input
+        self.start_serial_input()
 
         lg.info('Reading images')
         self.stimuli = _convert_stimuli(self.P)
@@ -100,28 +98,22 @@ class PrettyWidget(QtWidgets.QLabel):
         else:
             self.showNormal()
         self.serial(250)
-        self.open_dataglove()
-        
-    def open_dataglove(self):
-        lg.info('Opening dataglove')
-        DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.txt')
-        self.glove = FiveDTGlove(DATAGLOVE_LOG)
-        self.glove.open(b'USB0')
+        if self.P['DATAGLOVE']:
+            self.open_dataglove()
 
-    def start_dataglove(self):        
-        lg.info('Starting dataglove')
-        CMPFUNC = CFUNCTYPE(None, c_int)
-        c_func = CMPFUNC(partial(func, glove=self.glove))
-        self.glove.callback(c_func)
-        
-    def stop_dataglove(self):
-        lg.info('Stopping dataglove')
-        self.glove.remove_callback()
+    def open_dataglove(self):
+        try:
+            lg.info('Opening dataglove')
+            DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.txt')
+            self.glove = FiveDTGlove(DATAGLOVE_LOG)
+            self.glove.open(b'USB0')
+        except Exception as err:
+            lg.warning(err)
 
     def open_serial(self):
         try:
             self.port_trigger = Serial(
-                self.P['COM']['TRIGGER']['PORT'], 
+                self.P['COM']['TRIGGER']['PORT'],
                 baudrate=self.P['COM']['TRIGGER']['BAUDRATE'])
         except SerialException:
             lg.warning('could not open serial port for triggers')
@@ -138,7 +130,7 @@ class PrettyWidget(QtWidgets.QLabel):
             if self.port_trigger is not None:
                 try:
                     self.port_trigger.write(pack('>B', trigger))
-                except:
+                except Exception:
                     lg.warning('could not write to serial port')
                     self.open_serial()
 
@@ -152,17 +144,17 @@ class PrettyWidget(QtWidgets.QLabel):
 
         elif self.current_index is None:
             self.draw_text(event, qp, 'READY')
-			
+
         else:
 
             window_rect = event.rect()
             rect_x = window_rect.center().x()
             rect_y = window_rect.center().y()
-            
+
             current_pixmap = self.stimuli['pixmap'][self.current_index]
             if self.current_index == -1 or isinstance(current_pixmap, str):
                 self.draw_text(event, qp, current_pixmap)
-                
+
                 if current_pixmap == 'DONE':
                     if not self.finished:
                         self.finished = True
@@ -209,15 +201,15 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def draw_text(self, event, qp, text):
 
-        qp.setPen(QtGui.QColor(40, 40, 255 ))
+        qp.setPen(QtGui.QColor(40, 40, 255))
         qp.setFont(QtGui.QFont('Decorative', 50))
         qp.drawText(event.rect(), Qt.AlignCenter, text)
 
     def check_time(self):
 
         elapsed = self.time.elapsed() + self.delay
-        
-        if self.glove.new_data:
+
+        if self.P['DATAGLOVE'] and self.glove.new_data:
             glove_data = self.glove.get_sensor_raw_all()
             self.glove.f.write(datetime.now().strftime('%H:%M:%S.%f') + '\t' + '\t'.join([f'{x}' for x in glove_data]) + '\n')
 
@@ -243,7 +235,6 @@ class PrettyWidget(QtWidgets.QLabel):
         self.current_index = -1
         self.time.start()
         self.timer.start(self.P['QTIMER_INTERVAL'])
-        # self.start_serial_input()
         if self.sound['start'] is not None:
             self.sound['start'].play()
 
@@ -258,11 +249,14 @@ class PrettyWidget(QtWidgets.QLabel):
 
     def read_serial_input(self, number):
         lg.input(f'Received input trigger {number}')
+
+        if self.P['COM']['INPUT']['START_TRIGGER'] == number:
+            self.start()
+
         self.serial(254)
 
     def stop(self):
         lg.info('Stopping task')
-        # self.stop_dataglove()
 
         if self.timer is not None:
             self.timer.stop()
@@ -303,10 +297,10 @@ class PrettyWidget(QtWidgets.QLabel):
 
             elif event.key() == Qt.Key_PageUp:
                 self.showFullScreen()
-                
+
             elif event.key() == Qt.Key_PageDown:
                 self.showNormal()
-                
+
             else:
                 super().keyPressEvent(event)
         else:
@@ -368,7 +362,7 @@ def _convert_stimuli(P):
     stimuli['onset'][-2] = stimuli['onset'][-3] + P['OUTRO']
     stimuli['onset'][-1] = stimuli['onset'][-2] + 1
     stimuli['onset'] *= 1000  # s -> ms
-    
+
     # read images only once
     stimuli['pixmap'] = None
     stimuli['pixmap'][1:-2:2] = tsv['stim_file']
@@ -377,10 +371,10 @@ def _convert_stimuli(P):
         stimuli['pixmap'][stimuli['pixmap'] == png] = pixmap
     stimuli['pixmap'][::2] = P['BASELINE']
     stimuli['pixmap'][-2] = 'DONE'
-    
+
     stimuli['trigger'][1:-2:2] = tsv['trial_type']
     stimuli['trigger'][-2] = 251
-    
+
     return stimuli
 
 
@@ -397,22 +391,22 @@ def main():
 
     parser = ArgumentParser(prog='presentation')
     parser.add_argument(
-        'parameters', 
+        'parameters',
         nargs='?',
         help='json file with the parameters')
     args = parser.parse_args()
-    
+
     defaults_json = SCRIPT_DIR / 'default.json'
     with defaults_json.open() as f:
         PARAMETERS = load(f)
-    
+
     parameter_json = SCRIPT_DIR / args.parameters
     parameter_json = parameter_json.with_suffix('.json')
     with parameter_json.open() as f:
         CHANGES = load(f)
-        
+
     PARAMETERS.update(CHANGES)
- 
+
     lg.debug(pformat(PARAMETERS))
     w = PrettyWidget(PARAMETERS)
     app.exec()
