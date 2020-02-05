@@ -57,6 +57,10 @@ class FiveDTGlove:
         self.start = time.time()
         self.f = logfile.open('w+')
 
+    @static
+    def scan_USB(self):
+        return self.gloveDLL.fdScanUSB('')
+
     def open(self, port):
         """port should be a binary file, like b'USB0'
         """
@@ -69,9 +73,6 @@ class FiveDTGlove:
     def close(self):
         self.f.close()
         self.gloveDLL.fdClose(self.glovePntr)
-
-    def scan_USB(self):
-        return self.gloveDLL.fdScanUSB('')
 
     def get_glove_hand(self):
         return GLOVE_HAND[self.gloveDLL.fdGetGloveHand(self.glovePntr)]

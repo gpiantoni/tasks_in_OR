@@ -21,6 +21,17 @@ from datetime import datetime
 
 from .dataglove import FiveDTGlove
 
+lg = logging.getLogger('qttask')
+lg.addHandler(logging.StreamHandler())
+
+
+def handle_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    lg.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+sys.excepthook = handle_exception
+
 app = QApplication([])
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -37,9 +48,6 @@ logging.basicConfig(
     datefmt='%H:%M:%S',
     level=logging.DEBUG)
 logging.info("Log File")
-
-lg = logging.getLogger('qttask')
-lg.addHandler(logging.StreamHandler())
 
 
 class PrettyWidget(QtWidgets.QLabel):
