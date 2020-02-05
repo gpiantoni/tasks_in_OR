@@ -114,7 +114,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
         lg.info('Opening dataglove')
         self.glove = []
-        for i in range(5):  # TODO: we should use scan_USB but I get error
+        for i in range(2):  # TODO: we should use scan_USB but I get error
             DATAGLOVE_LOG = logname.parent / (logname.stem + f'_dataglove{i}.txt')
             new_glove = FiveDTGlove(DATAGLOVE_LOG)
             try:

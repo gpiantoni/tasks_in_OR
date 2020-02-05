@@ -52,10 +52,10 @@ class FiveDTGlove:
     gloveDLL = cdll.LoadLibrary(str(SCRIPT_DIR / "include/fglove.dll"))
 
     def __init__(self, logfile):
+        self.logfile = logfile
         if self.gloveDLL is None:
             raise IOError("Could not open fglove.dll")
         self.start = time.time()
-        self.f = logfile.open('w+')
 
     @classmethod
     def scan_USB(cls):
@@ -70,6 +70,7 @@ class FiveDTGlove:
         self.glovePntr = self.gloveDLL.fdOpen(port)
         if self.glovePntr == 0:
             raise IOError("Could not connect to 5DT glove.")
+        self.f = self.logfile.open('w+')
         self.num_sensors = self.get_num_sensors()
 
     def close(self):
