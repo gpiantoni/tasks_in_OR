@@ -6,6 +6,7 @@ from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent
 from PyQt5.QtCore import Qt
 from struct import pack, unpack
+import sys
 import logging
 
 from argparse import ArgumentParser
@@ -112,6 +113,7 @@ class PrettyWidget(QtWidgets.QLabel):
     def open_dataglove(self):
 
         lg.info('Opening dataglove')
+        for i in 
         DATAGLOVE_LOG = logname.parent / (logname.stem + '_dataglove.txt')
         self.glove = FiveDTGlove(DATAGLOVE_LOG)
         self.glove.open(b'USB0')

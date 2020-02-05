@@ -49,17 +49,20 @@ class FiveDTGlove:
     c_func = CMPFUNC(partial(func, glove=glove))
     glove.callback(c_func)
     """
+    gloveDLL = cdll.LoadLibrary(str(SCRIPT_DIR / "include/fglove.dll"))
 
     def __init__(self, logfile):
-        self.gloveDLL = cdll.LoadLibrary(str(SCRIPT_DIR / "include/fglove.dll"))
+       
         if self.gloveDLL is None:
             raise IOError("Could not open fglove.dll")
         self.start = time.time()
         self.f = logfile.open('w+')
 
-    @static
-    def scan_USB(self):
-        return self.gloveDLL.fdScanUSB('')
+    @classmethod
+    def scan_USB(cls):
+        """I get access violation writing ..."""
+        if cls.gloveDLL is not None:
+            return cls.gloveDLL.fdScanUSB('')
 
     def open(self, port):
         """port should be a binary file, like b'USB0'
