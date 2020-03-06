@@ -49,7 +49,12 @@ class FiveDTGlove:
     c_func = CMPFUNC(partial(func, glove=glove))
     glove.callback(c_func)
     """
-    gloveDLL = cdll.LoadLibrary(str(SCRIPT_DIR / "include/fglove.dll"))
+    try:
+        gloveDLL = cdll.LoadLibrary(str(SCRIPT_DIR / "include/fglove.dll"))
+    except OSError as err:
+        print('Could not initialize dataglove')
+        print(err)
+        gloveDLL = None
 
     def __init__(self, logfile):
         self.logfile = logfile

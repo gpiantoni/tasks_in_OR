@@ -189,7 +189,7 @@ class PrettyWidget(QtWidgets.QLabel):
                     size.height(),
                     current_pixmap)
 
-        self.drawText(event, qp)
+            self.drawText(event, qp)
 
         qp.end()
 
@@ -210,7 +210,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
         color = QtGui.QColor(self.cross_color)
         qp.setPen(color)
-        qp.setFont(QtGui.QFont('Decorative', 80))
+        qp.setFont(QtGui.QFont('Decorative', 70))
         qp.drawText(event.rect(), Qt.AlignCenter, '+')
 
     def draw_text(self, event, qp, text):
