@@ -210,7 +210,7 @@ class PrettyWidget(QtWidgets.QLabel):
 
         color = QtGui.QColor(self.cross_color)
         qp.setPen(color)
-        qp.setFont(QtGui.QFont('Decorative', 70))
+        qp.setFont(QtGui.QFont('SansSerif', 50))
         qp.drawText(event.rect(), Qt.AlignCenter, '+')
 
     def draw_text(self, event, qp, text):
@@ -264,7 +264,7 @@ class PrettyWidget(QtWidgets.QLabel):
         self.input_thread.start()
 
     def read_serial_input(self, number):
-        lg.input(f'Received input trigger {number}')
+        lg.info(f'Received input trigger {number}')
 
         if self.P['COM']['INPUT']['START_TRIGGER'] == number:
             self.start()

@@ -1,11 +1,11 @@
 {
 "COM": {
   "TRIGGER": {
-    "PORT": "COM9",
+    "PORT": "COM6",
     "BAUDRATE": 9600
     },
   "INPUT": {
-    "PORT": "COM8",
+    "PORT": "COM5",
     "BAUDRATE": 9600,
     "START_TRIGGER": 49
     }
@@ -15,7 +15,7 @@
   "ACTIVE": false
   },
 "BASELINE": "+",
-"FULLSCREEN": false,
+"FULLSCREEN": true,
 "DATAGLOVE": false,
 "SOUND": {
   "PLAY": true,
