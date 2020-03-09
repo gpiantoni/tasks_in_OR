@@ -11,6 +11,33 @@ pixmap0 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/jip/allemaal.jpg')
 pixmap1 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/fingermapping_right/stim_009.png')
 
 
+class Pres(QOpenGLWindow):
+    info = []
+    t = time()
+    color = True
+
+    def __init__(self):
+        super().__init__()
+        self.show()
+        self.frameSwapped.connect(self.update)
+
+    def paintGL(self):
+
+        self.color = not self.color
+        qp = QPainter()
+        qp.begin(self)
+        if self.color:
+            current_pixmap = pixmap0
+        else:
+            current_pixmap = pixmap1
+
+        qp.drawPixmap(0, 0, current_pixmap)
+
+        qp.end()
+        print(time() - self.t)
+        self.t = time()
+
+
 class W(QOpenGLWindow):
     color = False
 
@@ -65,7 +92,7 @@ class W(QOpenGLWindow):
         for i in range(300):
             self.color = not self.color
             t_ = time()
-            self.paintGL()
+            self.paint()
             t_1 = time() - t_
             self.c.swapBuffers(self.s)
             t_2 = time() - t_
@@ -75,11 +102,17 @@ class W(QOpenGLWindow):
         return a
 
 
-def main():
+def main_x():
     self = W()
     app.processEvents()
     x = self.test()
     print(1 / diff(array(x)).mean())
+    app.exec()
+
+
+def main():
+    self = Pres()
+    app.processEvents()
     app.exec()
 
 
