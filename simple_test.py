@@ -1,12 +1,14 @@
-from PyQt5.QtWidgets import QOpenGLWidget
-from PyQt5.QtGui import QSurfaceFormat, QOpenGLVersionProfile
+from PyQt5.QtGui import QSurfaceFormat, QOpenGLVersionProfile, QPixmap
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QOpenGLWidget
-from PyQt5.QtGui import QSurfaceFormat, QOpenGLVersionProfile, QWindow,QOpenGLWindow
+from PyQt5.QtGui import QOpenGLWindow, QPainter
 from time import time
 from numpy import array, diff
 
+
 app = QApplication([])
+
+pixmap0 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/jip/allemaal.jpg')
+pixmap1 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/fingermapping_right/stim_009.png')
 
 
 class W(QOpenGLWindow):
@@ -15,6 +17,7 @@ class W(QOpenGLWindow):
     def __init__(self):
         super().__init__()
         self.show()
+        self.showFullScreen()
 
     def initializeGL(self):
         self.c = self.context()
@@ -28,6 +31,18 @@ class W(QOpenGLWindow):
         super().initializeGL()
 
     def paintGL(self):
+        qp = QPainter()
+        qp.begin(self)
+        if self.color:
+            current_pixmap = pixmap0
+        else:
+            current_pixmap = pixmap1
+
+        qp.drawPixmap(0, 0, current_pixmap)
+
+        qp.end()
+
+    def paintGLx(self):
         self.gl.glClear(self.gl.GL_COLOR_BUFFER_BIT | self.gl.GL_DEPTH_BUFFER_BIT)
         if self.color:
             self.gl.glColor3f(0.5, 0.0, 1.0)
@@ -64,7 +79,7 @@ def main():
     self = W()
     app.processEvents()
     x = self.test()
-    print(1/ diff(array(x)).mean() )
+    print(1 / diff(array(x)).mean())
     app.exec()
 
 
