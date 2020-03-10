@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QOpenGLWindow, QPainter
+from PyQt5.QtWidgets import QApplication, QOpenGLWidget
 from PyQt5.QtMultimedia import QSound
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent
@@ -51,7 +52,7 @@ logging.basicConfig(
 logging.info("Log File")
 
 
-class PrettyWidget(QtWidgets.QLabel):
+class PrettyWidget(QOpenGLWidget):
     started = False
     finished = False
     timer = None
@@ -92,7 +93,7 @@ class PrettyWidget(QtWidgets.QLabel):
         # background color
         im = self.stimuli['pixmap'][1].toImage()
         self.bg_color = QtGui.QColor(im.pixel(0, 0))
-        self.setStyleSheet(f"background-color: {self.bg_color.name()};")
+        # self.setStyleSheet(f"background-color: {self.bg_color.name()};")
         self.show()
 
         self.time = QtCore.QTime()
@@ -148,26 +149,26 @@ class PrettyWidget(QtWidgets.QLabel):
                     lg.warning('could not write to serial port')
                     self.open_serial()
 
-    def paintEvent(self, event):
+    def paintGL(self):
 
         qp = QPainter()
         qp.begin(self)
 
         if self.paused:
-            self.draw_text(event, qp, 'PAUSED')
+            self.draw_text(qp, 'PAUSED')
 
         elif self.current_index is None:
-            self.draw_text(event, qp, 'READY')
+            self.draw_text(qp, 'READY')
 
         else:
 
-            window_rect = event.rect()
+            window_rect = self.rect()
             rect_x = window_rect.center().x()
             rect_y = window_rect.center().y()
 
             current_pixmap = self.stimuli['pixmap'][self.current_index]
             if self.current_index == -1 or isinstance(current_pixmap, str):
-                self.draw_text(event, qp, current_pixmap)
+                self.draw_text(qp, current_pixmap)
 
                 if current_pixmap == 'DONE':
                     if not self.finished:
@@ -189,11 +190,11 @@ class PrettyWidget(QtWidgets.QLabel):
                     size.height(),
                     current_pixmap)
 
-            self.drawText(event, qp)
+            self.drawText(qp)
 
         qp.end()
 
-    def drawText(self, event, qp):
+    def drawText(self, qp):
 
         if not self.P['FIXATION']['ACTIVE']:
             return
@@ -211,13 +212,13 @@ class PrettyWidget(QtWidgets.QLabel):
         color = QtGui.QColor(self.cross_color)
         qp.setPen(color)
         qp.setFont(QtGui.QFont('SansSerif', 50))
-        qp.drawText(event.rect(), Qt.AlignCenter, '+')
+        qp.drawText(self.rect(), Qt.AlignCenter, '+')
 
-    def draw_text(self, event, qp, text):
+    def draw_text(self, qp, text):
 
         qp.setPen(QtGui.QColor(40, 40, 255))
         qp.setFont(QtGui.QFont('Decorative', 50))
-        qp.drawText(event.rect(), Qt.AlignCenter, text)
+        qp.drawText(self.rect(), Qt.AlignCenter, text)
 
     def check_time(self):
 

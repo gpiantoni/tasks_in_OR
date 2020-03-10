@@ -51,6 +51,7 @@ class Pres(QOpenGLWindow):
     def __init__(self):
         super().__init__()
         self.show()
+        self.showFullScreen()
 
     def start(self):
         self.i = 0
@@ -68,7 +69,9 @@ class Pres(QOpenGLWindow):
 
             qp = QPainter()
             qp.begin(self)
+            qp.beginNativePainting()
             qp.drawPixmap(0, 0, self.stim['pixmap'][i_pixmap])
+            qp.endNativePainting()
             qp.end()
             self.i += 1
             self.info.append(time() - self.t)
@@ -149,6 +152,7 @@ def main_x():
 
 def main():
     self = Pres()
+    self.raise_()
     app.processEvents()
     self.start()
     app.exec()
