@@ -13,7 +13,7 @@ pixmap0 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/jip/allemaal.jpg')
 pixmap1 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/fingermapping_right/stim_009.png')
 
 def _convert_stimuli(STIMULI_TSV):
-    IMAGES_DIR = Path('/home/gio/tools/tasks_in_OR/opengl/images/')
+    IMAGES_DIR = Path('/home/gio/tools/tasks_in_OR/opengl/')
 
     tsv = genfromtxt(
         fname=STIMULI_TSV,
@@ -46,11 +46,10 @@ class Pres(QOpenGLWindow):
     t = time()
     color = True
     stim = _convert_stimuli('/home/gio/tools/tasks_in_OR/opengl/stim1.tsv')
-    i = None
+    i = 0
 
     def __init__(self):
         super().__init__()
-        super().initializeGL()
         self.show()
 
     def start(self):
