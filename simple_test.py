@@ -1,8 +1,10 @@
 from PyQt5.QtGui import QSurfaceFormat, QOpenGLVersionProfile, QPixmap
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QOpenGLWidget
 from PyQt5.QtGui import QOpenGLWindow, QPainter
 from time import time
 from numpy import array, diff
+from pathlib import Path
+from numpy import genfromtxt, zeros, dtype, where
 
 
 app = QApplication([])
@@ -10,32 +12,68 @@ app = QApplication([])
 pixmap0 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/jip/allemaal.jpg')
 pixmap1 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/fingermapping_right/stim_009.png')
 
+def _convert_stimuli(STIMULI_TSV):
+    IMAGES_DIR = Path('/home/gio/tools/tasks_in_OR/opengl/images/')
+
+    tsv = genfromtxt(
+        fname=STIMULI_TSV,
+        delimiter='\t',
+        names=True,
+        dtype=None,  # forces it to read strings
+        deletechars='',
+        encoding='utf-8')
+    n_stims = tsv.shape[0] + 1
+
+    stimuli = zeros(n_stims, dtype([
+        ('onset', 'int32'),
+        ('pixmap', 'O'),
+        ]))
+    stimuli['onset'][:-1] = tsv['onset']
+    stimuli['onset'][1:] = tsv['onset'] + tsv['duration']
+
+    # read images only once
+    stimuli['pixmap'] = None
+    stimuli['pixmap'][:-1] = tsv['stim_file']
+    d_images = {png: QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file'])}
+    for png, pixmap in d_images.items():
+        stimuli['pixmap'][stimuli['pixmap'] == png] = pixmap
+
+    return stimuli
+
 
 class Pres(QOpenGLWindow):
     info = []
     t = time()
     color = True
+    stim = _convert_stimuli('/home/gio/tools/tasks_in_OR/opengl/stim1.tsv')
+    i = None
 
     def __init__(self):
         super().__init__()
+        super().initializeGL()
         self.show()
+
+    def start(self):
+        self.i = 0
         self.frameSwapped.connect(self.update)
+        self.update()
 
     def paintGL(self):
+        print(self.i)
+        if self.i is not None:
 
-        self.color = not self.color
-        qp = QPainter()
-        qp.begin(self)
-        if self.color:
-            current_pixmap = pixmap0
-        else:
-            current_pixmap = pixmap1
+            i_pixmap = where(self.stim['onset'] <= self.i)[0][-1]
+            if self.stim['pixmap'][i_pixmap] is None:
+                self.close()
+                return
 
-        qp.drawPixmap(0, 0, current_pixmap)
-
-        qp.end()
-        print(time() - self.t)
-        self.t = time()
+            qp = QPainter()
+            qp.begin(self)
+            qp.drawPixmap(0, 0, self.stim['pixmap'][i_pixmap])
+            qp.end()
+            self.i += 1
+            self.info.append(time() - self.t)
+            print(time() - self.t)
 
 
 class W(QOpenGLWindow):
@@ -113,6 +151,7 @@ def main_x():
 def main():
     self = Pres()
     app.processEvents()
+    self.start()
     app.exec()
 
 
