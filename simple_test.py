@@ -12,6 +12,7 @@ app = QApplication([])
 pixmap0 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/jip/allemaal.jpg')
 pixmap1 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/fingermapping_right/stim_009.png')
 
+
 def _convert_stimuli(STIMULI_TSV):
     IMAGES_DIR = Path('/home/gio/tools/tasks_in_OR/opengl/')
 
