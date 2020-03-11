@@ -168,7 +168,6 @@ class PrettyWidget(QOpenGLWidget):
 
         else:
 
-
             current_pixmap = self.stimuli['pixmap'][self.current_index]
             if self.current_index == -1 or isinstance(current_pixmap, str):
                 self.draw_text(qp, current_pixmap)
@@ -358,44 +357,6 @@ class SerialInputWorker(QtCore.QObject):
                 serial_input = self.port_input.read()
                 if serial_input != b'':
                     self.signal_to_main.emit(unpack('>B', serial_input))
-
-
-def _convert_stimuli(P):
-
-    STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
-    tsv = genfromtxt(
-        fname=STIMULI_TSV,
-        delimiter='\t',
-        names=True,
-        dtype=None,  # forces it to read strings
-        deletechars='',
-        encoding='utf-8')
-    n_stims = tsv.shape[0] * 2 + 3  # onsets and offsets
-
-    stimuli = zeros(n_stims, dtype([
-        ('onset', '<f8'),
-        ('pixmap', 'O'),
-        ('trigger', 'uint8'),
-        ]))
-    stimuli['onset'][1:-2:2] = tsv['onset']
-    stimuli['onset'][2:-2:2] = tsv['onset'] + tsv['duration']
-    stimuli['onset'][-2] = stimuli['onset'][-3] + P['OUTRO']
-    stimuli['onset'][-1] = stimuli['onset'][-2] + 1
-    stimuli['onset'] *= 1000  # s -> ms
-
-    # read images only once
-    stimuli['pixmap'] = None
-    stimuli['pixmap'][1:-2:2] = tsv['stim_file']
-    d_images = {png: QtGui.QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file'])}
-    for png, pixmap in d_images.items():
-        stimuli['pixmap'][stimuli['pixmap'] == png] = pixmap
-    stimuli['pixmap'][::2] = P['BASELINE']
-    stimuli['pixmap'][-2] = 'DONE'
-
-    stimuli['trigger'][1:-2:2] = tsv['trial_type']
-    stimuli['trigger'][-2] = 251
-
-    return stimuli
 
 
 def _warn_about_ports():
