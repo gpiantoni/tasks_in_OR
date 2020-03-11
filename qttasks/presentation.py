@@ -101,7 +101,7 @@ class PrettyWidget(QOpenGLWidget):
             lg.warning('could not open serial port to read input')
             _warn_about_ports()
         self.port_input = port_input
-        # self.start_serial_input()
+        self.start_serial_input()
 
         lg.info('Reading images')
         self.stimuli = read_stimuli(self.P)
@@ -191,6 +191,7 @@ class PrettyWidget(QOpenGLWidget):
                     self.fast_tsv = None
                     self.fast_i = None
                     self.frameSwapped.disconnect()
+                    
                 
                 elif self.fast_tsv['stim_file'][i_pixmap] is not None:
                 
@@ -249,6 +250,7 @@ class PrettyWidget(QOpenGLWidget):
         qp.end()
 
         if self.fast_i == 0:
+            self.input_thread.msleep(1000)
             self.frameSwapped.connect(self.update)
             self.update()
 
@@ -321,6 +323,7 @@ class PrettyWidget(QOpenGLWidget):
         self.input_worker.signal_to_main.connect(self.read_serial_input)
         self.input_worker.moveToThread(self.input_thread)
         self.input_thread.start()
+        self.input_thread.setPriority(QThread.LowestPriority)
 
     def read_serial_input(self, number):
         lg.info(f'Received input trigger {number}')
@@ -336,6 +339,8 @@ class PrettyWidget(QOpenGLWidget):
         if self.timer is not None:
             self.timer.stop()
         
+        self.input_thread.quit()
+        app.processEvents()
         app.exit(1)
 
     def pause(self):
