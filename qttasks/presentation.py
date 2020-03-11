@@ -4,7 +4,7 @@ from PyQt5.QtGui import QOpenGLWindow, QPainter
 from PyQt5.QtWidgets import QApplication, QOpenGLWidget
 from PyQt5.QtMultimedia import QSound
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent
+from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent, QBrush, QColor
 from PyQt5.QtCore import Qt
 from struct import pack, unpack
 import sys
@@ -151,8 +151,14 @@ class PrettyWidget(QOpenGLWidget):
 
     def paintGL(self):
 
+        window_rect = self.rect()
+        rect_x = window_rect.center().x()
+        rect_y = window_rect.center().y()
+
         qp = QPainter()
         qp.begin(self)
+        
+        qp.fillRect(window_rect, self.bg_color)
 
         if self.paused:
             self.draw_text(qp, 'PAUSED')
@@ -162,9 +168,6 @@ class PrettyWidget(QOpenGLWidget):
 
         else:
 
-            window_rect = self.rect()
-            rect_x = window_rect.center().x()
-            rect_y = window_rect.center().y()
 
             current_pixmap = self.stimuli['pixmap'][self.current_index]
             if self.current_index == -1 or isinstance(current_pixmap, str):
