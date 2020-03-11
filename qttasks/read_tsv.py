@@ -1,5 +1,6 @@
 from numpy import (
     append,
+    atleast_1d,
     array,
     dtype,
     empty,
@@ -94,6 +95,7 @@ def read_fast_stimuli(STIMULI_TSV):
         deletechars='',
         encoding='utf-8')
     tsv = _change_dtype_to_O(tsv)
+    tsv = atleast_1d(tsv)
     
     out_tsv = []
     for i in range(tsv.shape[0]):
