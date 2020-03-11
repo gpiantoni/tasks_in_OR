@@ -101,7 +101,7 @@ class PrettyWidget(QOpenGLWidget):
             lg.warning('could not open serial port to read input')
             _warn_about_ports()
         self.port_input = port_input
-        self.start_serial_input()
+        # self.start_serial_input()
 
         lg.info('Reading images')
         self.stimuli = read_stimuli(self.P)
@@ -316,7 +316,7 @@ class PrettyWidget(QOpenGLWidget):
     def start_serial_input(self):
         self.input_worker = SerialInputWorker()
         self.input_worker.port_input = self.port_input
-        self.input_thread = QThread()
+        self.input_thread = QThread(self)
         self.input_thread.started.connect(self.input_worker.start_reading)
         self.input_worker.signal_to_main.connect(self.read_serial_input)
         self.input_worker.moveToThread(self.input_thread)
@@ -335,8 +335,8 @@ class PrettyWidget(QOpenGLWidget):
 
         if self.timer is not None:
             self.timer.stop()
-
-        self.close()
+        
+        app.exit(1)
 
     def pause(self):
         if not self.paused:
