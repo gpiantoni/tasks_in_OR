@@ -79,6 +79,7 @@ class PrettyWidget(QOpenGLWidget):
     sound = {'start': None, 'end': None}
     fast_tsv = None
     fast_i = None
+    fast_t = None
 
     def __init__(self, parameters):
         super().__init__()
@@ -183,11 +184,8 @@ class PrettyWidget(QOpenGLWidget):
 
         else:
             
-            current_pixmap = self.stimuli['stim_file'][self.current_index]
-            
             if self.fast_tsv is not None:
                 i_pixmap = where(self.fast_tsv['onset'] <= self.fast_i)[0][-1]
-                self.fast_i += 1
                 
                 if self.fast_i == self.fast_tsv['onset'][-1]:
                     self.fast_tsv = None
@@ -195,42 +193,58 @@ class PrettyWidget(QOpenGLWidget):
                     self.frameSwapped.disconnect()
                 
                 elif self.fast_tsv['stim_file'][i_pixmap] is not None:
+                
+                    current_pixmap = self.fast_tsv['stim_file'][i_pixmap]
+                    image_rect = current_pixmap.rect()
+                    size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
+                    img_origin_x = rect_x - int(size.width() / 2)
+                    img_origin_y = rect_y - int(size.height() / 2)
                
-                    qp.beginNativePainting()
-                    qp.drawPixmap(0, 0, self.fast_tsv['stim_file'][i_pixmap])
-                    qp.endNativePainting()
+                    # qp.beginNativePainting()
+                    qp.drawPixmap(
+                        img_origin_x,
+                        img_origin_y,
+                        size.width(),
+                        size.height(),
+                        current_pixmap)
+                    # qp.endNativePainting()
+                    
                     lg.debug(f'FAST IMAGE #{self.fast_i}')
+                    self.fast_i += 1
             
-            elif isinstance(current_pixmap, str):
+            else:
+            
+                current_pixmap = self.stimuli['stim_file'][self.current_index]
+                if isinstance(current_pixmap, str):
 
-                if current_pixmap.endswith('.tsv'):
-                    self.fast_tsv = read_fast_stimuli(IMAGES_DIR / current_pixmap)
-                    self.fast_i = 0
+                    if current_pixmap.endswith('.tsv'):
+                        self.fast_tsv = read_fast_stimuli(IMAGES_DIR / current_pixmap)
+                        self.fast_i = 0
+
+                    else:
+
+                        self.draw_text(qp, current_pixmap)
+                        if current_pixmap == 'END':
+                            if not self.finished:
+                                self.finished = True
+                                self.serial(None)
+                                if self.sound['end'] is not None:
+                                    self.sound['end'].play()
 
                 else:
+                    image_rect = current_pixmap.rect()
 
-                    self.draw_text(qp, current_pixmap)
-                    if current_pixmap == 'END':
-                        if not self.finished:
-                            self.finished = True
-                            self.serial(None)
-                            if self.sound['end'] is not None:
-                                self.sound['end'].play()
+                    size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
+                    img_origin_x = rect_x - int(size.width() / 2)
+                    img_origin_y = rect_y - int(size.height() / 2)
+                    qp.drawPixmap(
+                        img_origin_x,
+                        img_origin_y,
+                        size.width(),
+                        size.height(),
+                        current_pixmap)
 
-            else:
-                image_rect = current_pixmap.rect()
-
-                size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
-                img_origin_x = rect_x - int(size.width() / 2)
-                img_origin_y = rect_y - int(size.height() / 2)
-                qp.drawPixmap(
-                    img_origin_x,
-                    img_origin_y,
-                    size.width(),
-                    size.height(),
-                    current_pixmap)
-
-            self.drawText(qp)
+                self.drawText(qp)
 
         qp.end()
 
