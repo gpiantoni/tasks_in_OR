@@ -37,8 +37,8 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 
 from .dataglove import FiveDTGlove
-from .paths import LOG_DIR, SOUNDS_DIR, SCRIPT_DIR
-from .read_tsv import read_stimuli
+from .paths import LOG_DIR, SOUNDS_DIR, SCRIPT_DIR, IMAGES_DIR
+from .read_tsv import read_stimuli, read_fast_stimuli
 
 lg = logging.getLogger('qttask')
 lg.addHandler(logging.StreamHandler())
@@ -77,6 +77,8 @@ class PrettyWidget(QOpenGLWidget):
     cross_delay = 2
     cross_color = 'green'
     sound = {'start': None, 'end': None}
+    fast_tsv = None
+    fast_i = None
 
     def __init__(self, parameters):
         super().__init__()
@@ -172,8 +174,16 @@ class PrettyWidget(QOpenGLWidget):
         qp.begin(self)
 
         qp.fillRect(window_rect, self.bg_color)
-
-        if self.paused:
+        
+        if self.fast_tsv is not None:
+            i_pixmap = where(self.fast_tsv['onset'] <= self.fast_i)[0][-1]
+            if self.stim['pixmap'][i_pixmap] is not None:
+                qp.beginNativePainting()
+                qp.drawPixmap(0, 0, self.stim['pixmap'][i_pixmap])
+                qp.endNativePainting()
+                self.i += 1
+            
+        elif self.paused:
             self.draw_text(qp, 'PAUSED')
 
         elif self.current_index is None:
@@ -182,15 +192,21 @@ class PrettyWidget(QOpenGLWidget):
         else:
 
             current_pixmap = self.stimuli['stim_file'][self.current_index]
-            if self.current_index == -1 or isinstance(current_pixmap, str):
-                self.draw_text(qp, current_pixmap)
-
-                if current_pixmap == 'DONE':
-                    if not self.finished:
-                        self.finished = True
-                        self.serial(None)
-                        if self.sound['end'] is not None:
-                            self.sound['end'].play()
+            if isinstance(current_pixmap, str):
+            
+                if current_pixmap.endswith('.tsv'):
+                    self.fast_tsv = read_fast_stimuli(IMAGES_DIR / current_pixmap)
+                    self.fast_i = 0
+                
+                else:
+                
+                    self.draw_text(qp, current_pixmap)
+                    if current_pixmap == 'END':
+                        if not self.finished:
+                            self.finished = True
+                            self.serial(None)
+                            if self.sound['end'] is not None:
+                                self.sound['end'].play()
 
             else:
                 image_rect = current_pixmap.rect()
@@ -208,6 +224,10 @@ class PrettyWidget(QOpenGLWidget):
             self.drawText(qp)
 
         qp.end()
+        
+        if self.fast_i == 0:
+            self.frameSwapped.connect(self.update)
+            self.update()
 
     def drawText(self, qp):
 

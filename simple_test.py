@@ -14,7 +14,7 @@ pixmap1 = QPixmap('/home/gio/tools/tasks_in_OR/qttasks/images/fingermapping_righ
 
 
 def _convert_stimuli(STIMULI_TSV):
-    IMAGES_DIR = Path('/home/gio/tools/tasks_in_OR/opengl/')
+    IMAGES_DIR = STIMULI_TSV.parent
 
     tsv = genfromtxt(
         fname=STIMULI_TSV,
