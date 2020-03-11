@@ -1,27 +1,44 @@
 #!/usr/bin/env python3
 
-from PyQt5.QtGui import QOpenGLWindow, QPainter
-from PyQt5.QtWidgets import QApplication, QOpenGLWidget
-from PyQt5.QtMultimedia import QSound
-from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtGui import QKeyEvent, QPainter, QMouseEvent, QBrush, QColor
-from PyQt5.QtCore import Qt
 from struct import pack, unpack
 import sys
 import logging
-
 from argparse import ArgumentParser
 from random import random
 from pprint import pformat
 from json import load
-from numpy import where, genfromtxt, zeros, dtype
-from pathlib import Path
+from numpy import where
+from datetime import datetime
+
+from PyQt5.QtCore import (
+    Qt,
+    QObject,
+    QThread,
+    QTime,
+    QTimer,
+    pyqtSignal,
+    pyqtSlot,
+    )
+from PyQt5.QtGui import (
+    QColor,
+    QFont,
+    QKeyEvent,
+    QMouseEvent,
+    QPainter,
+    )
+from PyQt5.QtMultimedia import QSound
+from PyQt5.QtWidgets import (
+    QApplication,
+    QOpenGLWidget,
+    )
+
 from serial import Serial
 from serial import SerialException
 from serial.tools.list_ports import comports
-from datetime import datetime
 
 from .dataglove import FiveDTGlove
+from .paths import LOG_DIR, SOUNDS_DIR, SCRIPT_DIR
+from .read_tsv import read_stimuli
 
 lg = logging.getLogger('qttask')
 lg.addHandler(logging.StreamHandler())
@@ -32,14 +49,11 @@ def handle_exception(exc_type, exc_value, exc_traceback):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
     lg.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+
+
 sys.excepthook = handle_exception
 
 app = QApplication([])
-
-SCRIPT_DIR = Path(__file__).resolve().parent
-IMAGES_DIR = SCRIPT_DIR / 'images'
-SOUNDS_DIR = SCRIPT_DIR / 'sounds'
-LOG_DIR = SCRIPT_DIR / 'log'
 
 logname = LOG_DIR / f'log_{datetime.now():%Y%m%d_%H%M%S}.txt'
 
@@ -87,17 +101,17 @@ class PrettyWidget(QOpenGLWidget):
         self.start_serial_input()
 
         lg.info('Reading images')
-        self.stimuli = _convert_stimuli(self.P)
+        self.stimuli = read_stimuli(self.P)
         lg.info('Reading images: finished')
 
         # background color
         im = self.stimuli['pixmap'][1].toImage()
-        self.bg_color = QtGui.QColor(im.pixel(0, 0))
+        self.bg_color = QColor(im.pixel(0, 0))
         # self.setStyleSheet(f"background-color: {self.bg_color.name()};")
         self.show()
 
-        self.time = QtCore.QTime()
-        self.timer = QtCore.QTimer()
+        self.time = QTime()
+        self.timer = QTimer()
         self.timer.setTimerType(Qt.PreciseTimer)
         self.timer.timeout.connect(self.check_time)
 
@@ -157,7 +171,7 @@ class PrettyWidget(QOpenGLWidget):
 
         qp = QPainter()
         qp.begin(self)
-        
+
         qp.fillRect(window_rect, self.bg_color)
 
         if self.paused:
@@ -211,15 +225,15 @@ class PrettyWidget(QOpenGLWidget):
                 self.serial(241)
             self.cross_delay += random() * 5000 + 2000
 
-        color = QtGui.QColor(self.cross_color)
+        color = QColor(self.cross_color)
         qp.setPen(color)
-        qp.setFont(QtGui.QFont('SansSerif', 50))
+        qp.setFont(QFont('SansSerif', 50))
         qp.drawText(self.rect(), Qt.AlignCenter, '+')
 
     def draw_text(self, qp, text):
 
-        qp.setPen(QtGui.QColor(40, 40, 255))
-        qp.setFont(QtGui.QFont('Decorative', 50))
+        qp.setPen(QColor(40, 40, 255))
+        qp.setFont(QFont('Decorative', 50))
         qp.drawText(self.rect(), Qt.AlignCenter, text)
 
     def check_time(self):
@@ -260,7 +274,7 @@ class PrettyWidget(QOpenGLWidget):
     def start_serial_input(self):
         self.input_worker = SerialInputWorker()
         self.input_worker.port_input = self.port_input
-        self.input_thread = QtCore.QThread()
+        self.input_thread = QThread()
         self.input_thread.started.connect(self.input_worker.start_reading)
         self.input_worker.signal_to_main.connect(self.read_serial_input)
         self.input_worker.moveToThread(self.input_thread)
@@ -344,13 +358,13 @@ class PrettyWidget(QOpenGLWidget):
             super().mouseDoubleClickEvent(event)
 
 
-class SerialInputWorker(QtCore.QObject):
-    signal_to_main = QtCore.pyqtSignal(int)
+class SerialInputWorker(QObject):
+    signal_to_main = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
 
-    @QtCore.pyqtSlot()
+    @pyqtSlot()
     def start_reading(self):
         while True:
             if self.port_input is not None:

@@ -1,8 +1,20 @@
+from numpy import (
+    array,
+    dtype,
+    empty,
+    genfromtxt,
+    insert,
+    squeeze,
+    )
+from PyQt5.QtGui import QPixmap
+
+from .paths import IMAGES_DIR
+
 
 def read_stimuli(P):
 
     STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
-    
+
     tsv = genfromtxt(
         fname=STIMULI_TSV,
         delimiter='\t',
@@ -11,15 +23,15 @@ def read_stimuli(P):
         deletechars='',
         encoding='utf-8')
 
-    new_dtypes = []
-    for n in dtypes.names:
-        if dtypes[n].kind == 'U':
-            new_dtypes.append((n, 'U4096'))
+    # make sure that that text are long enough to keep many chars
+    dtypes = []
+    for n in tsv.dtype.names:
+        if tsv.dtype[n].kind == 'U':
+            dtypes.append((n, 'U4096'))
         else:
-            new_dtypes.append((n, dtypes[n]))
-            
-    tsv = array(tsv, dtype= dtype(new_dtypes))
+            dtypes.append((n, tsv.dtype[n]))
 
+    tsv = array(tsv, dtype=dtype(dtypes))
 
     x = empty((1, ), dtype=tsv.dtype)
     x['onset'] = 0
@@ -34,10 +46,10 @@ def read_stimuli(P):
     x['trial_name'] = 'task end'
     x['trial_type'] = 251
     tsv = insert(tsv, -1, x)
-    
+
     out_tsv = []
     for i in range(tsv.shape[0] - 1):
-        out_tsv.append(tsv[i:i+1])
+        out_tsv.append(tsv[i:i + 1])
         end_image = tsv[i]['onset'] + tsv[i]['duration']
         next_image = tsv[i + 1]['onset']
 
@@ -47,16 +59,16 @@ def read_stimuli(P):
             x['trial_name'] = P['BASELINE']
             x['trial_type'] = 0
             out_tsv.append(x)
-    tsv = squeeze(array(out_tsv))   
-    
-    d_images = {png: QtGui.QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file']) if png.endswith('.png') or png.endswith('.jpg')}
-    
+    tsv = squeeze(array(out_tsv))
+
+    d_images = {png: QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file']) if png.endswith('.png') or png.endswith('.jpg')}
+
     stim_file = tsv['stim_file'].astype('O')
     for i in range(stim_file.shape[0]):
         if stim_file[i] == '':
             stim_file[i] = None
         elif stim_file[i].endswith('.png') or stim_file[i].endswith('.jpg'):
             stim_file[i] = d_images[stim_file[i]]
-            
+
     tsv['stim_file'] = stim_file
     return tsv
