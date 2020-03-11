@@ -174,15 +174,15 @@ class PrettyWidget(QOpenGLWidget):
         qp.begin(self)
 
         qp.fillRect(window_rect, self.bg_color)
-        
+
         if self.fast_tsv is not None:
             i_pixmap = where(self.fast_tsv['onset'] <= self.fast_i)[0][-1]
-            if self.stim['pixmap'][i_pixmap] is not None:
+            if self.fast_tsv['pixmap'][i_pixmap] is not None:
                 qp.beginNativePainting()
-                qp.drawPixmap(0, 0, self.stim['pixmap'][i_pixmap])
+                qp.drawPixmap(0, 0, self.fast_tsv['pixmap'][i_pixmap])
                 qp.endNativePainting()
                 self.i += 1
-            
+
         elif self.paused:
             self.draw_text(qp, 'PAUSED')
 
@@ -193,13 +193,13 @@ class PrettyWidget(QOpenGLWidget):
 
             current_pixmap = self.stimuli['stim_file'][self.current_index]
             if isinstance(current_pixmap, str):
-            
+
                 if current_pixmap.endswith('.tsv'):
                     self.fast_tsv = read_fast_stimuli(IMAGES_DIR / current_pixmap)
                     self.fast_i = 0
-                
+
                 else:
-                
+
                     self.draw_text(qp, current_pixmap)
                     if current_pixmap == 'END':
                         if not self.finished:
@@ -224,7 +224,7 @@ class PrettyWidget(QOpenGLWidget):
             self.drawText(qp)
 
         qp.end()
-        
+
         if self.fast_i == 0:
             self.frameSwapped.connect(self.update)
             self.update()
