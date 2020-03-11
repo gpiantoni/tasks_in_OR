@@ -199,6 +199,7 @@ class PrettyWidget(QOpenGLWidget):
                     qp.beginNativePainting()
                     qp.drawPixmap(0, 0, self.fast_tsv['stim_file'][i_pixmap])
                     qp.endNativePainting()
+                    lg.debug(f'FAST IMAGE #{self.fast_i}')
             
             elif isinstance(current_pixmap, str):
 
