@@ -1,3 +1,3 @@
-onset	duration	stim_file	trial_type
-1	0.5	words/kaki.jpg	31
-2	0.5	words/koekie.jpg	32
+onset	duration	trial_name	stim_file	trial_type
+1	0.5	kaki	words/kaki.jpg	31
+2	0.5	koekie	words/koekie.jpg	32

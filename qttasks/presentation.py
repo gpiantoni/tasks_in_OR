@@ -105,9 +105,8 @@ class PrettyWidget(QOpenGLWidget):
         lg.info('Reading images: finished')
 
         # background color
-        im = self.stimuli['pixmap'][1].toImage()
-        self.bg_color = QColor(im.pixel(0, 0))
-        # self.setStyleSheet(f"background-color: {self.bg_color.name()};")
+        self.bg_color = QColor(self.P['BACKGROUND'])
+
         self.show()
 
         self.time = QTime()
@@ -182,7 +181,7 @@ class PrettyWidget(QOpenGLWidget):
 
         else:
 
-            current_pixmap = self.stimuli['pixmap'][self.current_index]
+            current_pixmap = self.stimuli['stim_file'][self.current_index]
             if self.current_index == -1 or isinstance(current_pixmap, str):
                 self.draw_text(qp, current_pixmap)
 
@@ -246,7 +245,7 @@ class PrettyWidget(QOpenGLWidget):
                     glove_data = glove.get_sensor_raw_all()
                     glove.f.write(datetime.now().strftime('%H:%M:%S.%f') + '\t' + '\t'.join([f'{x}' for x in glove_data]) + '\n')
 
-        index_image = where(self.stimuli['onset'] <= elapsed)[0]
+        index_image = where((self.stimuli['onset'] * 1e3) <= elapsed)[0]
         if len(index_image) == len(self.stimuli):
             self.stop()
 
@@ -257,7 +256,7 @@ class PrettyWidget(QOpenGLWidget):
                 self.current_index = index_image
 
                 if index_image is not None:
-                    i_trigger = self.stimuli['trigger'][index_image]
+                    i_trigger = self.stimuli['trial_type'][index_image]
                     self.serial(i_trigger)
 
         self.update()

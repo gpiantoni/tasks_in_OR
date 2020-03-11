@@ -1,4 +1,5 @@
 from numpy import (
+    append,
     array,
     dtype,
     empty,
@@ -26,7 +27,9 @@ def read_stimuli(P):
     # make sure that that text are long enough to keep many chars
     dtypes = []
     for n in tsv.dtype.names:
-        if tsv.dtype[n].kind == 'U':
+        if n in ('onset', 'duration'):
+            dtypes.append((n, '<f8'))  # make sure they are float
+        elif tsv.dtype[n].kind == 'U':
             dtypes.append((n, 'U4096'))
         else:
             dtypes.append((n, tsv.dtype[n]))
@@ -36,16 +39,16 @@ def read_stimuli(P):
     x = empty((1, ), dtype=tsv.dtype)
     x['onset'] = 0
     x['duration'] = 0.5  # should be parameter
-    x['trial_name'] = 'task start'
+    x['stim_file'] = 'task start'
     x['trial_type'] = 250
     tsv = insert(tsv, 0, x)
 
     x = empty((1, ), dtype=tsv.dtype)
     x['onset'] = tsv['onset'][-1] + tsv['duration'][-1] + P['OUTRO']
     x['duration'] = 0.5  # should be parameter
-    x['trial_name'] = 'task end'
+    x['stim_file'] = 'task end'
     x['trial_type'] = 251
-    tsv = insert(tsv, -1, x)
+    tsv = append(tsv, x)
 
     out_tsv = []
     for i in range(tsv.shape[0] - 1):
@@ -56,19 +59,30 @@ def read_stimuli(P):
         if end_image < next_image:
             x = empty((1, ), dtype=tsv.dtype)
             x['onset'] = end_image
-            x['trial_name'] = P['BASELINE']
+            x['stim_file'] = P['BASELINE']
             x['trial_type'] = 0
             out_tsv.append(x)
+    out_tsv.append(tsv[-1:])
     tsv = squeeze(array(out_tsv))
 
-    d_images = {png: QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file']) if png.endswith('.png') or png.endswith('.jpg')}
+    d_images = {}
+    for img in set(tsv['stim_file']):
+        if img.endswith('.png') or img.endswith('.jpg'):
+            img_file = IMAGES_DIR / img
+            if not img_file.exists():
+                print(f'{img_file} does not exist')
+            d_images[img] = QPixmap(str(img_file))
 
-    stim_file = tsv['stim_file'].astype('O')
-    for i in range(stim_file.shape[0]):
-        if stim_file[i] == '':
-            stim_file[i] = None
-        elif stim_file[i].endswith('.png') or stim_file[i].endswith('.jpg'):
-            stim_file[i] = d_images[stim_file[i]]
+    # change dtype for stim_file only
+    dtypes = []
+    for k, v in tsv.dtype.descr:
+        if k == 'stim_file':
+            v = 'O'
+        dtypes.append((k, v))
+    tsv = tsv.astype(dtypes)
+    
+    for i in range(tsv['stim_file'].shape[0]):
+        if tsv['stim_file'][i].endswith('.png') or tsv['stim_file'][i].endswith('.jpg'):
+            tsv['stim_file'][i] = d_images[tsv['stim_file'][i]]
 
-    tsv['stim_file'] = stim_file
     return tsv
