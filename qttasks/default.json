@@ -15,7 +15,7 @@
   "ACTIVE": false
   },
 "BASELINE": "+",
-"BACKGROUND": "RGB(128, 128, 128)",
+"BACKGROUND": "grey",
 "FULLSCREEN": false,
 "DATAGLOVE": false,
 "SOUND": {
