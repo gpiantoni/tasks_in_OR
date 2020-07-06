@@ -248,6 +248,7 @@ class PrettyWidget(QtWidgets.QLabel):
         self.input_thread.start()
 
     def read_serial_input(self, number):
+	# unpack('>B', serial_input)
         lg.info(f'Received input trigger {number}')
 
         if number > 100 and not self.started:
@@ -337,7 +338,7 @@ class SerialInputWorker(QtCore.QObject):
             if self.port_input is not None:
                 serial_input = self.port_input.read()
                 if serial_input != b'':
-                    self.signal_to_main.emit(unpack('>B', serial_input))
+                    self.signal_to_main.emit(serial_input)
 
 
 def _convert_stimuli(P):

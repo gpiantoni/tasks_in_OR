@@ -1,41 +1,81 @@
-onset	duration	stim_file	trial_type 
-1	1	words/kika.jpg	33
-4	1	words/kaki.jpg	32
-7	1	words/kiekoe.jpg	31
-10	1	words/koekie.jpg	34
-13	1	words/kaki.jpg	32
-16	1	words/koekie.jpg	34
-19	1	words/kiekoe.jpg	31
-22	1	words/kika.jpg	33
-25	1	words/koekie.jpg	34
-28	1	words/kika.jpg	33
-31	1	words/kiekoe.jpg	31
-34	1	words/kaki.jpg	32
-37	1	words/kaki.jpg	32
-40	1	words/kika.jpg	33
-43	1	words/koekie.jpg	34
-46	1	words/kiekoe.jpg	31
-49	1	words/kaki.jpg	32
-52	1	words/kiekoe.jpg	31
-55	1	words/koekie.jpg	34
-58	1	words/kika.jpg	33
-61	1	words/kaki.jpg	32
-64	1	words/kika.jpg	33
-67	1	words/koekie.jpg	34
-70	1	words/kiekoe.jpg	31
-73	1	words/kaki.jpg	32
-76	1	words/kiekoe.jpg	31
-79	1	words/koekie.jpg	34
-82	1	words/kika.jpg	33
-85	1	words/kaki.jpg	32
-88	1	words/kiekoe.jpg	31 
-91	1	words/kika.jpg	33
-94	1	words/koekie.jpg	34
-97	1	words/kika.jpg	33
-100	1	words/kiekoe.jpg	31
-103	1	words/kaki.jpg	32
-106	1	words/koekie.jpg	34
-109	1	words/kaki.jpg	32
-112	1	words/kiekoe.jpg	31
-115	1	words/kika.jpg	33
-118	1	words/koekie.jpg	34
+onset	duration	stim_file	trial_type 							
+2.1	2	words/kaki.jpg	1							
+12.6	2	words/kika.jpg	1							
+23.1	2	words/kaki.jpg	1							
+33.6	2	words/kika.jpg	1							
+44.1	2	words/kaki.jpg	1							
+54.6	2	words/kika.jpg	1							
+65.1	2	words/kaki.jpg	1							
+75.6	2	words/kaki.jpg	1							
+86.1	2	words/kaki.jpg	1							
+96.6	2	words/kika.jpg	1							
+107.1	2	words/kika.jpg	1							
+117.6	2	words/kika.jpg	1							
+128.1	2	words/kika.jpg	1							
+138.6	2	words/kika.jpg	1							
+149.1	2	words/kaki.jpg	1							
+159.6	2	words/kaki.jpg	1							
+170.1	2	words/kika.jpg	1							
+180.6	2	words/kika.jpg	1							
+191.1	2	words/kika.jpg	1							
+201.6	2	words/kika.jpg	1							
+212.1	2	words/kaki.jpg	1							
+222.6	2	words/kaki.jpg	1							
+233.1	2	words/kaki.jpg	1							
+243.6	2	words/kaki.jpg	1							
+254.1	2	words/kika.jpg	1							
+264.6	2	words/kika.jpg	1							
+275.1	2	words/kaki.jpg	1							
+285.6	2	words/kika.jpg	1							
+296.1	2	words/kaki.jpg	1							
+306.6	2	words/kika.jpg	1							 
+317.1	2	words/kaki.jpg	1							
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
