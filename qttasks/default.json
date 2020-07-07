@@ -15,7 +15,7 @@
   "ACTIVE": false
   },
 "BASELINE": "+",
-"FULLSCREEN": false,
+"FULLSCREEN": true,
 "DATAGLOVE": false,
 "SOUND": {
   "PLAY": true,
