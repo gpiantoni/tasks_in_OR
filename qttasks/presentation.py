@@ -9,6 +9,7 @@ from pprint import pformat
 from json import load
 from numpy import where
 from datetime import datetime
+from time import sleep
 
 from PyQt5.QtCore import (
     Qt,
@@ -37,7 +38,7 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 
 from .dataglove import FiveDTGlove
-from .paths import LOG_DIR, SOUNDS_DIR, SCRIPT_DIR, IMAGES_DIR
+from .paths import LOG_DIR, SOUNDS_DIR, DEFAULTS_JSON, TASKS_DIR
 from .read_tsv import read_stimuli, read_fast_stimuli
 
 lg = logging.getLogger('qttask')
@@ -183,24 +184,23 @@ class PrettyWidget(QOpenGLWidget):
             self.draw_text(qp, 'READY')
 
         else:
-            
+
             if self.fast_tsv is not None:
                 i_pixmap = where(self.fast_tsv['onset'] <= self.fast_i)[0][-1]
-                
+
                 if self.fast_i == self.fast_tsv['onset'][-1]:
                     self.fast_tsv = None
                     self.fast_i = None
                     self.frameSwapped.disconnect()
-                    
-                
+
                 elif self.fast_tsv['stim_file'][i_pixmap] is not None:
-                
+
                     current_pixmap = self.fast_tsv['stim_file'][i_pixmap]
                     image_rect = current_pixmap.rect()
                     size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
                     img_origin_x = rect_x - int(size.width() / 2)
                     img_origin_y = rect_y - int(size.height() / 2)
-               
+
                     # qp.beginNativePainting()
                     qp.drawPixmap(
                         img_origin_x,
@@ -209,12 +209,12 @@ class PrettyWidget(QOpenGLWidget):
                         size.height(),
                         current_pixmap)
                     # qp.endNativePainting()
-                    
+
                     lg.debug(f'FAST IMAGE #{self.fast_i}')
                     self.fast_i += 1
-            
+
             else:
-            
+
                 current_pixmap = self.stimuli['stim_file'][self.current_index]
                 if isinstance(current_pixmap, str):
 
@@ -227,6 +227,7 @@ class PrettyWidget(QOpenGLWidget):
                         self.draw_text(qp, current_pixmap)
                         if current_pixmap == 'END':
                             if not self.finished:
+                                self.draw_text(qp, 'END')
                                 self.finished = True
                                 self.serial(None)
                                 if self.sound['end'] is not None:
@@ -318,7 +319,7 @@ class PrettyWidget(QOpenGLWidget):
     def start_serial_input(self):
         self.input_worker = SerialInputWorker()
         self.input_worker.port_input = self.port_input
-        self.input_thread = QThread(self)
+        self.input_thread = QThread(parent=self)
         self.input_thread.started.connect(self.input_worker.start_reading)
         self.input_worker.signal_to_main.connect(self.read_serial_input)
         self.input_worker.moveToThread(self.input_thread)
@@ -335,11 +336,13 @@ class PrettyWidget(QOpenGLWidget):
 
     def stop(self):
         lg.info('Stopping task')
+        sleep(1)
 
         if self.timer is not None:
             self.timer.stop()
-        
-        self.input_thread.quit()
+
+        self.input_thread.terminate()
+        print(self.input_thread.isRunning())
         app.processEvents()
         app.exit(1)
 
@@ -426,28 +429,28 @@ def _warn_about_ports():
         ports = ', '.join(port_names)
         lg.warning(f'Available ports are {ports}')
     else:
-        lg.warning(f'No available ports')
+        lg.warning('No available ports')
 
 
 def main():
 
     parser = ArgumentParser(prog='presentation')
     parser.add_argument(
-        'parameters',
+        'task',
         nargs='?',
-        help='json file with the parameters')
+        help='folder with the task information (it needs at least a "parameters.json" file)')
     args = parser.parse_args()
 
-    defaults_json = SCRIPT_DIR / 'default.json'
-    with defaults_json.open() as f:
+    with DEFAULTS_JSON.open() as f:
         PARAMETERS = load(f)
 
-    parameter_json = SCRIPT_DIR / args.parameters
-    parameter_json = parameter_json.with_suffix('.json')
+    task_dir = TASKS_DIR / args.task
+    parameter_json = task_dir / 'parameters.json'
     with parameter_json.open() as f:
         CHANGES = load(f)
 
     PARAMETERS.update(CHANGES)
+    PARAMETERS['TASK_TSV'] = (task_dir / PARAMETERS['TASK_TSV']).resolve()
 
     lg.debug(pformat(PARAMETERS))
     w = PrettyWidget(PARAMETERS)

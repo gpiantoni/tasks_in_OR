@@ -11,20 +11,19 @@ from numpy import (
     )
 from PyQt5.QtGui import QPixmap
 
-from .paths import IMAGES_DIR
-
 
 def read_stimuli(P):
 
-    STIMULI_TSV = str(IMAGES_DIR / P['TASK_TSV'])
+    task_dir = P['TASK_TSV'].parent
 
     tsv = genfromtxt(
-        fname=STIMULI_TSV,
+        fname=str(P['TASK_TSV']),
         delimiter='\t',
         names=True,
         dtype=None,  # forces it to read strings
         deletechars='',
         encoding='utf-8')
+    tsv = atleast_1d(tsv)
 
     # make sure that that text are long enough to keep many chars
     dtypes = []
@@ -38,18 +37,12 @@ def read_stimuli(P):
 
     tsv = array(tsv, dtype=dtype(dtypes))
 
-    x = empty((1, ), dtype=tsv.dtype)
-    x['onset'] = 0
-    x['duration'] = 0.5  # should be parameter
-    x['stim_file'] = 'START'
-    x['trial_type'] = 250
-    tsv = insert(tsv, 0, x)
-
-    x = empty((1, ), dtype=tsv.dtype)
-    x['onset'] = tsv['onset'][-1] + tsv['duration'][-1] + P['OUTRO']
-    x['duration'] = 0.5  # should be parameter
-    x['stim_file'] = 'END'
-    x['trial_type'] = 251
+    x = empty((2, ), dtype=tsv.dtype)
+    x['onset'][0] = tsv['onset'][-1] + tsv['duration'][-1] + P['OUTRO']
+    x['duration'][0] = 1
+    x['stim_file'][0] = 'END'
+    x['trial_type'][0] = 251
+    x['onset'][1] = x['onset'][0] + x['duration'][0]
     tsv = append(tsv, x)
 
     out_tsv = []
@@ -70,20 +63,20 @@ def read_stimuli(P):
     d_images = {}
     for img in set(tsv['stim_file']):
         if img.endswith('.png') or img.endswith('.jpg'):
-            img_file = IMAGES_DIR / img
+            img_file = task_dir / img
             if not img_file.exists():
                 print(f'{img_file} does not exist')
             d_images[img] = QPixmap(str(img_file))
 
     tsv = _change_dtype_to_O(tsv)
-    
+
     for i in range(tsv['stim_file'].shape[0]):
         if tsv['stim_file'][i].endswith('.png') or tsv['stim_file'][i].endswith('.jpg'):
             tsv['stim_file'][i] = d_images[tsv['stim_file'][i]]
 
     return tsv
 
-    
+
 def read_fast_stimuli(STIMULI_TSV):
     IMAGES_DIR = STIMULI_TSV.parent
 
@@ -96,7 +89,7 @@ def read_fast_stimuli(STIMULI_TSV):
         encoding='utf-8')
     tsv = _change_dtype_to_O(tsv)
     tsv = atleast_1d(tsv)
-    
+
     out_tsv = []
     for i in range(tsv.shape[0]):
         out_tsv.append(tsv[i:i + 1])
@@ -115,7 +108,7 @@ def read_fast_stimuli(STIMULI_TSV):
         tsv['stim_file'][tsv['stim_file'] == png] = pixmap
 
     return tsv
-    
+
 
 def _change_dtype_to_O(tsv, name='stim_file'):
     # change dtype for stim_file only
@@ -125,4 +118,4 @@ def _change_dtype_to_O(tsv, name='stim_file'):
             v = 'O'
         dtypes.append((k, v))
     return tsv.astype(dtypes)
-    
+
