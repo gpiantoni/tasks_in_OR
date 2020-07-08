@@ -1,2 +1,7 @@
 {
+  "BACKGROUND": "grey",
+  "FIXATION": {
+    "ACTIVE": true
+    },
+  "BASELINE": ""
 }
