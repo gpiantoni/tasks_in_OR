@@ -380,6 +380,7 @@ class PrettyWidget(QOpenGLWidget):
                 self.pause()
 
             elif event.key() == Qt.Key_Escape:
+                lg.info('Pressed Escape')
                 self.serial(255)
                 self.stop()
 

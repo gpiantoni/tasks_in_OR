@@ -54,6 +54,7 @@ def read_stimuli(P):
         if end_image < next_image:
             x = empty((1, ), dtype=tsv.dtype)
             x['onset'] = end_image
+            x['trial_name'] = 'BASELINE'
             x['stim_file'] = P['BASELINE']
             x['trial_type'] = 0
             out_tsv.append(x)
