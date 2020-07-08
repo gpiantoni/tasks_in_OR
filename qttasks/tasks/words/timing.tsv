@@ -1,101 +1,101 @@
-onset	duration	stim_file	trial_type 
-1	1	images/kika.jpg	33
-4	1	images/kaki.jpg	32
-7	1	images/kiekoe.jpg	31
-10	1	images/koekie.jpg	34
-13	1	images/rest.jpg	35
-16	1	images/kaki.jpg	32
-19	1	images/koekie.jpg	34
-22	1	images/kiekoe.jpg	31
-25	1	images/kika.jpg	33
-28	1	images/rest.jpg	35
-31	1	images/koekie.jpg	34
-34	1	images/kika.jpg	33
-37	1	images/kiekoe.jpg	31
-40	1	images/kaki.jpg	32
-43	1	images/rest.jpg	35
-46	1	images/kaki.jpg	32
-49	1	images/kika.jpg	33
-52	1	images/koekie.jpg	34
-55	1	images/kiekoe.jpg	31
-58	1	images/rest.jpg	35
-61	1	images/kaki.jpg	32
-64	1	images/kiekoe.jpg	31
-67	1	images/koekie.jpg	34
-70	1	images/kika.jpg	33
-73	1	images/rest.jpg	35
-76	1	images/kaki.jpg	32
-79	1	images/kika.jpg	33
-82	1	images/koekie.jpg	34
-85	1	images/kiekoe.jpg	31
-88	1	images/rest.jpg	35
-91	1	images/kaki.jpg	32
-94	1	images/kiekoe.jpg	31
-97	1	images/koekie.jpg	34
-100	1	images/kika.jpg	33
-103	1	images/rest.jpg	35
-106	1	images/kaki.jpg	32
-109	1	images/kiekoe.jpg	31
-112	1	images/kika.jpg	33
-115	1	images/koekie.jpg	34
-118	1	images/rest.jpg	35
-121	1	images/kika.jpg	33
-124	1	images/kiekoe.jpg	31
-127	1	images/kaki.jpg	32
-130	1	images/koekie.jpg	34
-133	1	images/rest.jpg	35
-136	1	images/kaki.jpg	32
-139	1	images/kiekoe.jpg	31
-142	1	images/kika.jpg	33
-145	1	images/koekie.jpg	34
-148	1	images/rest.jpg	35
-151	1	images/kika.jpg	33
-154	1	images/kaki.jpg	32
-157	1	images/kiekoe.jpg	31
-160	1	images/koekie.jpg	34
-163	1	images/rest.jpg	35
-166	1	images/kaki.jpg	32
-169	1	images/koekie.jpg	34
-172	1	images/kiekoe.jpg	31
-175	1	images/kika.jpg	33
-178	1	images/rest.jpg	35
-181	1	images/koekie.jpg	34
-184	1	images/kika.jpg	33
-187	1	images/kiekoe.jpg	31
-190	1	images/kaki.jpg	32
-193	1	images/rest.jpg	35
-196	1	images/kaki.jpg	32
-199	1	images/kika.jpg	33
-202	1	images/koekie.jpg	34
-205	1	images/kiekoe.jpg	31
-208	1	images/rest.jpg	35
-211	1	images/kaki.jpg	32
-214	1	images/kiekoe.jpg	31
-217	1	images/koekie.jpg	34
-220	1	images/kika.jpg	33
-223	1	images/rest.jpg	35
-226	1	images/kaki.jpg	32
-229	1	images/kika.jpg	33
-232	1	images/koekie.jpg	34
-235	1	images/kiekoe.jpg	31
-238	1	images/rest.jpg	35
-241	1	images/kaki.jpg	32
-244	1	images/kiekoe.jpg	31
-247	1	images/koekie.jpg	34
-250	1	images/kika.jpg	33
-253	1	images/rest.jpg	35
-256	1	images/kaki.jpg	32
-259	1	images/kiekoe.jpg	31
-262	1	images/kika.jpg	33
-265	1	images/koekie.jpg	34
-268	1	images/rest.jpg	35
-271	1	images/kika.jpg	33
-274	1	images/kiekoe.jpg	31
-277	1	images/kaki.jpg	32
-280	1	images/koekie.jpg	34
-283	1	images/rest.jpg	35
-286	1	images/kaki.jpg	32
-289	1	images/kiekoe.jpg	31
-292	1	images/kika.jpg	33
-295	1	images/koekie.jpg	34
-298	1	images/rest.jpg	35
+onset	duration	trial_name	stim_file	trial_type 
+1	1	kika	images/kika.jpg	33
+4	1	kaki	images/kaki.jpg	32
+7	1	kiekoe	images/kiekoe.jpg	31
+10	1	koekie	images/koekie.jpg	34
+13	1	rest	images/rest.jpg	35
+16	1	kaki	images/kaki.jpg	32
+19	1	koekie	images/koekie.jpg	34
+22	1	kiekoe	images/kiekoe.jpg	31
+25	1	kika	images/kika.jpg	33
+28	1	rest	images/rest.jpg	35
+31	1	koekie	images/koekie.jpg	34
+34	1	kika	images/kika.jpg	33
+37	1	kiekoe	images/kiekoe.jpg	31
+40	1	kaki	images/kaki.jpg	32
+43	1	rest	images/rest.jpg	35
+46	1	kaki	images/kaki.jpg	32
+49	1	kika	images/kika.jpg	33
+52	1	koekie	images/koekie.jpg	34
+55	1	kiekoe	images/kiekoe.jpg	31
+58	1	rest	images/rest.jpg	35
+61	1	kaki	images/kaki.jpg	32
+64	1	kiekoe	images/kiekoe.jpg	31
+67	1	koekie	images/koekie.jpg	34
+70	1	kika	images/kika.jpg	33
+73	1	rest	images/rest.jpg	35
+76	1	kaki	images/kaki.jpg	32
+79	1	kika	images/kika.jpg	33
+82	1	koekie	images/koekie.jpg	34
+85	1	kiekoe	images/kiekoe.jpg	31
+88	1	rest	images/rest.jpg	35
+91	1	kaki	images/kaki.jpg	32
+94	1	kiekoe	images/kiekoe.jpg	31
+97	1	koekie	images/koekie.jpg	34
+100	1	kika	images/kika.jpg	33
+103	1	rest	images/rest.jpg	35
+106	1	kaki	images/kaki.jpg	32
+109	1	kiekoe	images/kiekoe.jpg	31
+112	1	kika	images/kika.jpg	33
+115	1	koekie	images/koekie.jpg	34
+118	1	rest	images/rest.jpg	35
+121	1	kika	images/kika.jpg	33
+124	1	kiekoe	images/kiekoe.jpg	31
+127	1	kaki	images/kaki.jpg	32
+130	1	koekie	images/koekie.jpg	34
+133	1	rest	images/rest.jpg	35
+136	1	kaki	images/kaki.jpg	32
+139	1	kiekoe	images/kiekoe.jpg	31
+142	1	kika	images/kika.jpg	33
+145	1	koekie	images/koekie.jpg	34
+148	1	rest	images/rest.jpg	35
+151	1	kika	images/kika.jpg	33
+154	1	kaki	images/kaki.jpg	32
+157	1	kiekoe	images/kiekoe.jpg	31
+160	1	koekie	images/koekie.jpg	34
+163	1	rest	images/rest.jpg	35
+166	1	kaki	images/kaki.jpg	32
+169	1	koekie	images/koekie.jpg	34
+172	1	kiekoe	images/kiekoe.jpg	31
+175	1	kika	images/kika.jpg	33
+178	1	rest	images/rest.jpg	35
+181	1	koekie	images/koekie.jpg	34
+184	1	kika	images/kika.jpg	33
+187	1	kiekoe	images/kiekoe.jpg	31
+190	1	kaki	images/kaki.jpg	32
+193	1	rest	images/rest.jpg	35
+196	1	kaki	images/kaki.jpg	32
+199	1	kika	images/kika.jpg	33
+202	1	koekie	images/koekie.jpg	34
+205	1	kiekoe	images/kiekoe.jpg	31
+208	1	rest	images/rest.jpg	35
+211	1	kaki	images/kaki.jpg	32
+214	1	kiekoe	images/kiekoe.jpg	31
+217	1	koekie	images/koekie.jpg	34
+220	1	kika	images/kika.jpg	33
+223	1	rest	images/rest.jpg	35
+226	1	kaki	images/kaki.jpg	32
+229	1	kika	images/kika.jpg	33
+232	1	koekie	images/koekie.jpg	34
+235	1	kiekoe	images/kiekoe.jpg	31
+238	1	rest	images/rest.jpg	35
+241	1	kaki	images/kaki.jpg	32
+244	1	kiekoe	images/kiekoe.jpg	31
+247	1	koekie	images/koekie.jpg	34
+250	1	kika	images/kika.jpg	33
+253	1	rest	images/rest.jpg	35
+256	1	kaki	images/kaki.jpg	32
+259	1	kiekoe	images/kiekoe.jpg	31
+262	1	kika	images/kika.jpg	33
+265	1	koekie	images/koekie.jpg	34
+268	1	rest	images/rest.jpg	35
+271	1	kika	images/kika.jpg	33
+274	1	kiekoe	images/kiekoe.jpg	31
+277	1	kaki	images/kaki.jpg	32
+280	1	koekie	images/koekie.jpg	34
+283	1	rest	images/rest.jpg	35
+286	1	kaki	images/kaki.jpg	32
+289	1	kiekoe	images/kiekoe.jpg	31
+292	1	kika	images/kika.jpg	33
+295	1	koekie	images/koekie.jpg	34
+298	1	rest	images/rest.jpg	35

@@ -73,6 +73,7 @@ class PrettyWidget(QOpenGLWidget):
     timer = None
     port_trigger = None
     current_index = None
+    presenting = None
     paused = False
     delay = 0  # used when pausing
     cross_delay = 2
@@ -158,7 +159,7 @@ class PrettyWidget(QOpenGLWidget):
             if self.port_trigger is not None:
                 self.port_trigger.close()
         else:
-            lg.info(f'Sending trigger {trigger:03d}')
+            lg.debug(f'Sending trigger {trigger:03d}')
             if self.port_trigger is not None:
                 try:
                     self.port_trigger.write(pack('>B', trigger))
@@ -250,6 +251,12 @@ class PrettyWidget(QOpenGLWidget):
 
         qp.end()
 
+        if self.presenting is not None:  # send triggers and log info right after the image was presented
+            trial = self.stimuli[self.presenting]
+            lg.info('Presenting ' + str(trial['trial_name']))
+            self.serial(trial['trial_type'])
+            self.presenting = None
+
         if self.fast_i == 0:
             self.input_thread.msleep(1000)
             self.frameSwapped.connect(self.update)
@@ -302,8 +309,7 @@ class PrettyWidget(QOpenGLWidget):
                 self.current_index = index_image
 
                 if index_image is not None:
-                    i_trigger = self.stimuli['trial_type'][index_image]
-                    self.serial(i_trigger)
+                    self.presenting = index_image
 
         self.update()
 
