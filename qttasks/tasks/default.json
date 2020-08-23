@@ -2,7 +2,7 @@
 "COM": {
   "TRIGGER": {
     "PORT": "COM6",
-    "BAUDRATE": 9600
+    "BAUDRATE": 115200
     },
   "INPUT": {
     "PORT": "COM5",
