@@ -5,9 +5,7 @@ from numpy import (
     dtype,
     empty,
     genfromtxt,
-    insert,
     squeeze,
-    zeros,
     )
 from PyQt5.QtGui import QPixmap
 
