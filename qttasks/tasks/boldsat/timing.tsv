@@ -1,4 +1,4 @@
-onsets	duration	trial_name	trial_type	stim_file
+onset	duration	trial_name	trial_type	stim_file
 0.000	0.200	BOLDSAT_0.83Hz	83	../hrf/images/green_circle.png
 1.200	0.200	BOLDSAT	1	../hrf/images/green_circle.png
 2.400	0.200	BOLDSAT	1	../hrf/images/green_circle.png
