@@ -38,7 +38,7 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 
 from .dataglove import FiveDTGlove
-from .paths import LOG_DIR, SOUNDS_DIR, DEFAULTS_JSON, TASKS_DIR
+from .paths import LOG_DIR, SOUNDS_DIR, DEFAULTS_JSON, TASKS_DIR, update
 from .read_tsv import read_stimuli, read_fast_stimuli
 
 lg = logging.getLogger('qttask')
@@ -454,7 +454,7 @@ def main():
     with parameter_json.open() as f:
         CHANGES = load(f)
 
-    PARAMETERS.update(CHANGES)
+    PARAMETERS = update(PARAMETERS, CHANGES)
     PARAMETERS['TASK_TSV'] = (task_dir / PARAMETERS['TASK_TSV']).resolve()
 
     lg.debug(pformat(PARAMETERS))

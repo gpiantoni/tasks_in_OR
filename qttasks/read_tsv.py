@@ -44,6 +44,15 @@ def read_stimuli(P):
     tsv = append(tsv, x)
 
     out_tsv = []
+
+    if tsv[0]['onset'] > 0:  # start with baseline
+        x = empty((1, ), dtype=tsv.dtype)
+        x['onset'] = 0
+        x['trial_name'] = 'BASELINE'
+        x['stim_file'] = P['BASELINE']
+        x['trial_type'] = 0
+        out_tsv.append(x)
+
     for i in range(tsv.shape[0] - 1):
         out_tsv.append(tsv[i:i + 1])
         end_image = tsv[i]['onset'] + tsv[i]['duration']
