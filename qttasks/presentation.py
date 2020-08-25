@@ -103,7 +103,7 @@ class PrettyWidget(QOpenGLWidget):
             lg.warning('could not open serial port to read input')
             _warn_about_ports()
         self.port_input = port_input
-        # self.start_serial_input()
+        self.start_serial_input()
 
         lg.info('Reading images')
         self.stimuli = read_stimuli(self.P)
@@ -314,6 +314,9 @@ class PrettyWidget(QOpenGLWidget):
         self.update()
 
     def start(self):
+        if self.started:
+            return
+
         lg.warning('Starting')
         self.started = True
         self.current_index = -1
@@ -347,7 +350,7 @@ class PrettyWidget(QOpenGLWidget):
         if self.timer is not None:
             self.timer.stop()
 
-        # self.input_thread.terminate()
+        self.input_thread.terminate()
         app.processEvents()
         app.exit(1)
 
@@ -369,11 +372,7 @@ class PrettyWidget(QOpenGLWidget):
 
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
-            if (not self.started
-                and (
-                    event.key() == Qt.Key_Enter
-                    or event.key() == Qt.Key_Return)):
-
+            if event.key() in (Qt.Key_Enter, Qt.Key_Return):
                 self.start()
 
             elif event.key() == Qt.Key_Space:
