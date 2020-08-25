@@ -7,16 +7,18 @@ DUR_OFF = 6
 N_EVENTS = 12
 LEVELS = array([3, 6, 9, 12])
 DUR = 0.2
+BASELINE = 2
+
 
 def main():
-    l = repeat(LEVELS, N_EVENTS)
-    shuffle(l)
+    l_events = repeat(LEVELS, N_EVENTS)
+    shuffle(l_events)
 
     onsets = []
     trial_names = []
     trial_types = []
-    for i, n_events in enumerate(l):
-        onset_trl = linspace(0, DUR_ON, n_events) + i * (DUR_ON + DUR_OFF)
+    for i, n_events in enumerate(l_events):
+        onset_trl = linspace(0, DUR_ON, n_events) + i * (DUR_ON + DUR_OFF) + BASELINE
         onsets.append(onset_trl)
 
         freq = (n_events - 1) / DUR_ON
