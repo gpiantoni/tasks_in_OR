@@ -424,8 +424,8 @@ class SerialInputWorker(QObject):
         while True:
             if self.port_input is not None:
                 serial_input = self.port_input.read()
-                if serial_input != b'':
-                    self.signal_to_main.emit(unpack('>B', serial_input))
+                if serial_input != b'' and serial_input != b'0x00':
+                    self.signal_to_main.emit(unpack('>B', serial_input)[0])
 
 
 def _warn_about_ports():
