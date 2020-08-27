@@ -413,6 +413,10 @@ class PrettyWidget(QOpenGLWidget):
         else:
             super().mouseDoubleClickEvent(event)
 
+    def closeEvent(self, event):
+        self.stop()
+        event.accept()
+
 
 class SerialInputWorker(QObject):
     signal_to_main = pyqtSignal(int)
