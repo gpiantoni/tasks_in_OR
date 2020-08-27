@@ -133,15 +133,14 @@ class PrettyWidget(QOpenGLWidget):
 
         lg.info('Opening dataglove')
         self.glove = []
+        if FiveDTGlove.gloveDLL is None:  # could not initialize DLL
+            return
+
         for i in range(2):  # TODO: we should use scan_USB but I get error
             DATAGLOVE_LOG = logname.parent / (logname.stem + f'_dataglove{i}.txt')
             new_glove = FiveDTGlove(DATAGLOVE_LOG)
-            try:
-                new_glove.open(f'USB{i}'.encode())
-            except IOError:
-                pass
-            else:
-                self.glove.append(new_glove)
+            new_glove.open(f'USB{i}'.encode())
+            self.glove.append(new_glove)
 
     def open_serial(self):
         try:
@@ -345,14 +344,16 @@ class PrettyWidget(QOpenGLWidget):
 
     def stop(self):
         lg.info('Stopping task')
-        sleep(1)
 
         if self.timer is not None:
             self.timer.stop()
 
+        # nice wayt to stop the worker
+        self.input_worker.running = False
         self.input_thread.terminate()
-        app.processEvents()
-        app.exit(1)
+
+        sleep(1)
+        app.exit(0)
 
     def pause(self):
         if not self.paused:
@@ -415,13 +416,14 @@ class PrettyWidget(QOpenGLWidget):
 
 class SerialInputWorker(QObject):
     signal_to_main = pyqtSignal(int)
+    running = True
 
     def __init__(self):
         super().__init__()
 
     @pyqtSlot()
     def start_reading(self):
-        while True:
+        while self.running:
             if self.port_input is not None:
                 serial_input = self.port_input.read()
                 if serial_input != b'' and serial_input != b'\x00':
