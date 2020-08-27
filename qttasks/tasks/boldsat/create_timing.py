@@ -3,7 +3,7 @@ from numpy import array, repeat, linspace, concatenate
 from numpy.random import shuffle
 
 DUR_ON = 6
-DUR_OFF = 12
+DUR_OFF = 6
 N_EVENTS = 10
 LEVELS = array([3, 6, 9, 12])
 DUR = 0.2
@@ -35,7 +35,7 @@ def main():
         'duration': DUR,
         'trial_name': trial_names,
         'trial_type': trial_types,
-        'stim_file': '../hrf/images/green_circle.png',
+        'stim_file': '../circle/images/green_circle.png',
         }
 
     df = DataFrame(df)
