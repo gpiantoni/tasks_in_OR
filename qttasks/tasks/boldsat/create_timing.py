@@ -1,13 +1,15 @@
 from pandas import DataFrame
 from numpy import array, repeat, linspace, concatenate
 from numpy.random import shuffle
+from pathlib import Path
 
 DUR_ON = 6
-DUR_OFF = 12
-N_EVENTS = 10
+DUR_OFF = 4
+N_EVENTS = 15
 LEVELS = array([3, 6, 9, 12])
 DUR = 0.2
 BASELINE = 2
+BOLDSAT_DIRECTORY = Path(__file__).resolve().parent
 
 
 def main():
@@ -39,7 +41,7 @@ def main():
         }
 
     df = DataFrame(df)
-    df.to_csv('timing.tsv', sep='\t', index=False, float_format='%.3f')
+    df.to_csv(BOLDSAT_DIRECTORY / 'timing.tsv', sep='\t', index=False, float_format='%.3f')
 
 
 if __name__ == '__main__':
