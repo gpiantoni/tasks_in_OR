@@ -139,8 +139,12 @@ class PrettyWidget(QOpenGLWidget):
         for i in range(2):  # TODO: we should use scan_USB but I get error
             DATAGLOVE_LOG = logname.parent / (logname.stem + f'_dataglove{i}.txt')
             new_glove = FiveDTGlove(DATAGLOVE_LOG)
-            new_glove.open(f'USB{i}'.encode())
-            self.glove.append(new_glove)
+            try:
+                new_glove.open(f'USB{i}'.encode())
+            except IOError:
+                pass
+            else:
+                self.glove.append(new_glove)
 
     def open_serial(self):
         try:
