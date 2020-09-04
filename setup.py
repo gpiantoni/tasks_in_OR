@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='qttasks',
-    version='0.1',
+    version='0.2',
     description='Tasks to run with QT',
     url='https://github.com/gpiantoni/tasks_in_OR',
     author="Gio Piantoni",
@@ -37,6 +37,7 @@ setup(
     entry_points={
         'console_scripts': [
             'qttasks=qttasks.presentation:main',
+            'qt_convert_log2tsv=qttasks.convert_log_to_tsv:main',
         ],
     },
 )
