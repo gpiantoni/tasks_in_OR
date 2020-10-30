@@ -82,6 +82,9 @@ def read_stimuli(P):
         if tsv['stim_file'][i].endswith('.png') or tsv['stim_file'][i].endswith('.jpg'):
             tsv['stim_file'][i] = d_images[tsv['stim_file'][i]]
 
+        elif tsv['stim_file'][i].endswith('.tsv'):
+            tsv['stim_file'][i] = task_dir / tsv['stim_file'][i]
+
     return tsv
 
 
@@ -98,6 +101,7 @@ def read_fast_stimuli(STIMULI_TSV):
     tsv = _change_dtype_to_O(tsv)
     tsv = atleast_1d(tsv)
 
+    
     out_tsv = []
     for i in range(tsv.shape[0]):
         out_tsv.append(tsv[i:i + 1])
@@ -109,12 +113,12 @@ def read_fast_stimuli(STIMULI_TSV):
             out_tsv.append(x)
 
     tsv = squeeze(array(out_tsv))
-
+    
     # read images only once
     d_images = {png: QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file']) if png is not None}
     for png, pixmap in d_images.items():
         tsv['stim_file'][tsv['stim_file'] == png] = pixmap
-
+    
     return tsv
 
 

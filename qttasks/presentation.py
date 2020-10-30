@@ -10,6 +10,7 @@ from json import load
 from numpy import where
 from datetime import datetime
 from time import sleep
+from pathlib import Path
 
 from PyQt5.QtCore import (
     Qt,
@@ -197,44 +198,40 @@ class PrettyWidget(QOpenGLWidget):
                     self.fast_i = None
                     self.frameSwapped.disconnect()
 
-                elif self.fast_tsv['stim_file'][i_pixmap] is not None:
+                else:
+                    if self.fast_tsv['stim_file'][i_pixmap] is not None:
+                        current_pixmap = self.fast_tsv['stim_file'][i_pixmap]
+                        image_rect = current_pixmap.rect()
+                        size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
+                        img_origin_x = rect_x - int(size.width() / 2)
+                        img_origin_y = rect_y - int(size.height() / 2)
 
-                    current_pixmap = self.fast_tsv['stim_file'][i_pixmap]
-                    image_rect = current_pixmap.rect()
-                    size = image_rect.size().scaled(window_rect.size(), Qt.KeepAspectRatio)
-                    img_origin_x = rect_x - int(size.width() / 2)
-                    img_origin_y = rect_y - int(size.height() / 2)
-
-                    # qp.beginNativePainting()
-                    qp.drawPixmap(
-                        img_origin_x,
-                        img_origin_y,
-                        size.width(),
-                        size.height(),
-                        current_pixmap)
-                    # qp.endNativePainting()
+                        qp.beginNativePainting()
+                        qp.drawPixmap(
+                            img_origin_x,
+                            img_origin_y,
+                            size.width(),
+                            size.height(),
+                            current_pixmap)
+                        qp.endNativePainting()
 
                     lg.debug(f'FAST IMAGE #{self.fast_i}')
                     self.fast_i += 1
 
             else:
-
                 current_pixmap = self.stimuli['stim_file'][self.current_index]
-                if isinstance(current_pixmap, str):
+                if isinstance(current_pixmap, Path):
+                    self.fast_tsv = read_fast_stimuli(current_pixmap)
+                    self.fast_i = 0
 
-                    if current_pixmap.endswith('.tsv'):
-                        self.fast_tsv = read_fast_stimuli(IMAGES_DIR / current_pixmap)
-                        self.fast_i = 0
-
-                    else:
-
-                        self.draw_text(qp, current_pixmap)
-                        if current_pixmap == 'END':
-                            if not self.finished:
-                                self.draw_text(qp, 'END')
-                                self.finished = True
-                                self.serial(None)
-                                if self.sound['end'] is not None:
+                elif isinstance(current_pixmap, str):
+                    self.draw_text(qp, current_pixmap)
+                    if current_pixmap == 'END':
+                        if not self.finished:
+                            self.draw_text(qp, 'END')
+                            self.finished = True
+                            self.serial(None)
+                            if self.sound['end'] is not None:
                                     self.sound['end'].play()
 
                 else:

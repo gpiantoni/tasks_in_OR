@@ -1,5 +1,6 @@
 {
   "FIXATION": {
     "ACTIVE": true
-  }
+  },
+  "BACKGROUND": "grey"
 }
