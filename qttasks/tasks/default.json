@@ -5,7 +5,7 @@
     "BAUDRATE": 115200
     },
   "INPUT": {
-    "PORT": "COM4",
+    "PORT": "COM1",
     "BAUDRATE": 9600,
     "START_TRIGGER": 49
     }

@@ -1,6 +1,8 @@
 {
+  "BACKGROUND": "grey",
   "FIXATION": {
     "ACTIVE": true
-  },
-  "BACKGROUND": "grey"
+    },
+  "BASELINE": "",
+  "OUTRO": 8.5
 }
