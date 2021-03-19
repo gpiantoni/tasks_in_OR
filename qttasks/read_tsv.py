@@ -101,7 +101,6 @@ def read_fast_stimuli(STIMULI_TSV):
     tsv = _change_dtype_to_O(tsv)
     tsv = atleast_1d(tsv)
 
-    
     out_tsv = []
     for i in range(tsv.shape[0]):
         out_tsv.append(tsv[i:i + 1])
@@ -113,12 +112,12 @@ def read_fast_stimuli(STIMULI_TSV):
             out_tsv.append(x)
 
     tsv = squeeze(array(out_tsv))
-    
+
     # read images only once
     d_images = {png: QPixmap(str(IMAGES_DIR / png)) for png in set(tsv['stim_file']) if png is not None}
     for png, pixmap in d_images.items():
         tsv['stim_file'][tsv['stim_file'] == png] = pixmap
-    
+
     return tsv
 
 

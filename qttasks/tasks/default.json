@@ -16,7 +16,7 @@
   },
 "BASELINE": "+",
 "BACKGROUND": "black",
-"FULLSCREEN": true,
+"FULLSCREEN": false,
 "DATAGLOVE": false,
 "SOUND": {
   "PLAY": true,
