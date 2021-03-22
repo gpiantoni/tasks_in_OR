@@ -174,8 +174,8 @@ class PrettyWidget(QOpenGLWidget):
     def paintGL(self):
 
         window_rect = self.rect()
-        rect_x = window_rect.center().x()
-        rect_y = window_rect.center().y()
+        rect_x = window_rect.center().x() + self.P['SCREEN']['RIGHTWARDS']
+        rect_y = window_rect.center().y() + self.P['SCREEN']['DOWNWARDS']
 
         qp = QPainter()
         qp.begin(self)
@@ -232,7 +232,7 @@ class PrettyWidget(QOpenGLWidget):
                             self.finished = True
                             self.serial(None)
                             if self.sound['end'] is not None:
-                                    self.sound['end'].play()
+                                self.sound['end'].play()
 
                 else:
                     image_rect = current_pixmap.rect()
@@ -280,13 +280,22 @@ class PrettyWidget(QOpenGLWidget):
         color = QColor(self.cross_color)
         qp.setPen(color)
         qp.setFont(QFont('SansSerif', 50))
-        qp.drawText(self.rect(), Qt.AlignCenter, '+')
+        qp.drawText(*self.center_rect(), Qt.AlignCenter, '+')
 
     def draw_text(self, qp, text):
 
         qp.setPen(QColor(40, 40, 255))
         qp.setFont(QFont('Decorative', 50))
-        qp.drawText(self.rect(), Qt.AlignCenter, text)
+        qp.drawText(*self.center_rect(), Qt.AlignCenter, text)
+
+    def center_rect(self):
+        window_rect = self.rect()
+        width = window_rect.width()
+        height = window_rect.height()
+        img_origin_x = window_rect.center().x() - int(width / 2) + self.P['SCREEN']['RIGHTWARDS']
+        img_origin_y = window_rect.center().y() - int(height / 2) + self.P['SCREEN']['DOWNWARDS']
+
+        return (img_origin_x, img_origin_y, width, height)
 
     def check_time(self):
 

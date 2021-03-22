@@ -11,6 +11,10 @@
     }
   },
 "QTIMER_INTERVAL": 1,
+"SCREEN": {
+  "DOWNWARDS": -200,
+  "RIGHTWARDS": 0
+  },
 "FIXATION": {
   "ACTIVE": false
   },
