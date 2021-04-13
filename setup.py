@@ -21,6 +21,7 @@ setup(
     install_requires=[
         'numpy',
         'pyserial',
+        'psutil',
         ],
     package_data={
         'qttasks': [

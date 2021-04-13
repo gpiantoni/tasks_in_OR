@@ -12,6 +12,11 @@ from datetime import datetime
 from time import sleep
 from pathlib import Path
 
+try:
+    from psutil import Process, HIGH_PRIORITY_CLASS  # only windows
+except ImportError:
+    Process = None
+
 from PyQt5.QtCore import (
     Qt,
     QObject,
@@ -472,6 +477,10 @@ def main():
 
     PARAMETERS = update(PARAMETERS, CHANGES)
     PARAMETERS['TASK_TSV'] = (task_dir / PARAMETERS['TASK_TSV']).resolve()
+    
+    if Process is not None:
+        ps = Process()
+        ps.nice(HIGH_PRIORITY_CLASS)    
 
     lg.debug(pformat(PARAMETERS))
     w = PrettyWidget(PARAMETERS)
