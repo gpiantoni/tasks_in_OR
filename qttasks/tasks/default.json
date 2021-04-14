@@ -20,7 +20,7 @@
   },
 "BASELINE": "+",
 "BACKGROUND": "black",
-"FULLSCREEN": false,
+"FULLSCREEN": true,
 "DATAGLOVE": false,
 "SOUND": {
   "PLAY": true,
@@ -28,5 +28,5 @@
   "END": "S8_part2.wav"
   },
 "TASK_TSV": "timing.tsv",
-"OUTRO": 2
+"OUTRO": 5
 }
