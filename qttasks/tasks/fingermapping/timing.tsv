@@ -1,82 +1,82 @@
 onset	duration	trial_type	trial_name	stim_file
-0	6	20	open palm	images/stim_001.png
-6	5	21	little close	images/stim_002.png
-11	5	22	ring close	images/stim_003.png
-16	5	23	middle close	images/stim_004.png
-21	5	24	index close	images/stim_005.png
-26	6	25	thumb close closed palm	images/stim_006.png
-32	5	26	thumb open	images/stim_005.png
-37	5	27	index open	images/stim_004.png
-42	5	28	middle open	images/stim_003.png
-47	5	29	ring open	images/stim_002.png
-52	6	30	little open open palm	images/stim_001.png
-58	5	31	thumb close	images/stim_007.png
-63	5	24	index close	images/stim_008.png
-68	5	23	middle close	images/stim_009.png
-73	5	22	ring close	images/stim_010.png
-78	6	32	pinky close closed palm	images/stim_006.png
-84	5	33	pinky open	images/stim_010.png
-89	5	29	ring open	images/stim_009.png
-94	5	28	middle open	images/stim_008.png
-99	5	27	index open	images/stim_007.png
-104	6	35	thumb open open palm	images/stim_001.png
-110	5	21	little close	images/stim_002.png
-115	5	22	ring close	images/stim_003.png
-120	5	23	middle close	images/stim_004.png
-125	5	24	index close	images/stim_005.png
-130	6	25	thumb close closed palm	images/stim_006.png
-136	5	26	thumb open	images/stim_005.png
-141	5	27	index open	images/stim_004.png
-146	5	28	middle open	images/stim_003.png
-151	5	29	ring open	images/stim_002.png
-156	6	30	little open open palm	images/stim_001.png
-162	5	31	thumb close	images/stim_007.png
-167	5	24	index close	images/stim_008.png
-172	5	23	middle close	images/stim_009.png
-177	5	22	ring close	images/stim_010.png
-182	6	32	pinky close closed palm	images/stim_006.png
-188	5	33	pinky open	images/stim_010.png
-193	5	29	ring open	images/stim_009.png
-198	5	28	middle open	images/stim_008.png
-203	5	27	index open	images/stim_007.png
-208	6	35	thumb open open palm	images/stim_001.png
-214	5	21	little close	images/stim_002.png
-219	5	22	ring close	images/stim_003.png
-224	5	23	middle close	images/stim_004.png
-229	5	24	index close	images/stim_005.png
-234	6	25	thumb close closed palm	images/stim_006.png
-240	5	26	thumb open	images/stim_005.png
-245	5	27	index open	images/stim_004.png
-250	5	28	middle open	images/stim_003.png
-255	5	29	ring open	images/stim_002.png
-260	6	30	little open open palm	images/stim_001.png
-266	5	31	thumb close	images/stim_007.png
-271	5	24	index close	images/stim_008.png
-276	5	23	middle close	images/stim_009.png
-281	5	22	ring close	images/stim_010.png
-286	6	32	pinky close closed palm	images/stim_006.png
-292	5	33	pinky open	images/stim_010.png
-297	5	29	ring open	images/stim_009.png
-302	5	28	middle open	images/stim_008.png
-307	5	27	index open	images/stim_007.png
-312	6	35	thumb open open palm	images/stim_001.png
-318	5	21	little close	images/stim_002.png
-323	5	22	ring close	images/stim_003.png
-328	5	23	middle close	images/stim_004.png
-333	5	24	index close	images/stim_005.png
-338	6	25	thumb close closed palm	images/stim_006.png
-344	5	26	thumb open	images/stim_005.png
-349	5	27	index open	images/stim_004.png
-354	5	28	middle open	images/stim_003.png
-359	5	29	ring open	images/stim_002.png
-364	6	30	little open open palm	images/stim_001.png
-370	5	31	thumb close	images/stim_007.png
-375	5	24	index close	images/stim_008.png
-380	5	23	middle close	images/stim_009.png
-385	5	22	ring close	images/stim_010.png
-390	6	32	pinky close closed palm	images/stim_006.png
-396	5	33	pinky open	images/stim_010.png
-401	5	29	ring open	images/stim_009.png
-406	5	28	middle open	images/stim_008.png
-411	5	27	index open	images/stim_007.png
-416	6	35	thumb open open palm	images/stim_001.png
+0	5	20	open palm	images/stim_001.png
+5	5	21	little close	images/stim_002.png
+10	5	22	ring close	images/stim_003.png
+15	5	23	middle close	images/stim_004.png
+20	5	24	index close	images/stim_005.png
+25	5	25	thumb close closed palm	images/stim_006.png
+30	5	26	thumb open	images/stim_005.png
+35	5	27	index open	images/stim_004.png
+40	5	28	middle open	images/stim_003.png
+45	5	29	ring open	images/stim_002.png
+50	5	30	little open open palm	images/stim_001.png
+55	5	31	thumb close	images/stim_007.png
+60	5	24	index close	images/stim_008.png
+65	5	23	middle close	images/stim_009.png
+70	5	22	ring close	images/stim_010.png
+75	5	32	pinky close closed palm	images/stim_006.png
+80	5	33	pinky open	images/stim_010.png
+85	5	29	ring open	images/stim_009.png
+90	5	28	middle open	images/stim_008.png
+95	5	27	index open	images/stim_007.png
+100	5	35	thumb open open palm	images/stim_001.png
+105	5	21	little close	images/stim_002.png
+110	5	22	ring close	images/stim_003.png
+115	5	23	middle close	images/stim_004.png
+120	5	24	index close	images/stim_005.png
+125	5	25	thumb close closed palm	images/stim_006.png
+130	5	26	thumb open	images/stim_005.png
+135	5	27	index open	images/stim_004.png
+140	5	28	middle open	images/stim_003.png
+145	5	29	ring open	images/stim_002.png
+150	5	30	little open open palm	images/stim_001.png
+155	5	31	thumb close	images/stim_007.png
+160	5	24	index close	images/stim_008.png
+165	5	23	middle close	images/stim_009.png
+170	5	22	ring close	images/stim_010.png
+175	5	32	pinky close closed palm	images/stim_006.png
+180	5	33	pinky open	images/stim_010.png
+185	5	29	ring open	images/stim_009.png
+190	5	28	middle open	images/stim_008.png
+195	5	27	index open	images/stim_007.png
+200	5	35	thumb open open palm	images/stim_001.png
+205	5	21	little close	images/stim_002.png
+210	5	22	ring close	images/stim_003.png
+215	5	23	middle close	images/stim_004.png
+220	5	24	index close	images/stim_005.png
+225	5	25	thumb close closed palm	images/stim_006.png
+230	5	26	thumb open	images/stim_005.png
+235	5	27	index open	images/stim_004.png
+240	5	28	middle open	images/stim_003.png
+245	5	29	ring open	images/stim_002.png
+250	5	30	little open open palm	images/stim_001.png
+255	5	31	thumb close	images/stim_007.png
+260	5	24	index close	images/stim_008.png
+265	5	23	middle close	images/stim_009.png
+270	5	22	ring close	images/stim_010.png
+275	5	32	pinky close closed palm	images/stim_006.png
+280	5	33	pinky open	images/stim_010.png
+285	5	29	ring open	images/stim_009.png
+290	5	28	middle open	images/stim_008.png
+295	5	27	index open	images/stim_007.png
+300	5	35	thumb open open palm	images/stim_001.png
+305	5	21	little close	images/stim_002.png
+310	5	22	ring close	images/stim_003.png
+315	5	23	middle close	images/stim_004.png
+320	5	24	index close	images/stim_005.png
+325	5	25	thumb close closed palm	images/stim_006.png
+330	5	26	thumb open	images/stim_005.png
+335	5	27	index open	images/stim_004.png
+340	5	28	middle open	images/stim_003.png
+345	5	29	ring open	images/stim_002.png
+350	5	30	little open open palm	images/stim_001.png
+355	5	31	thumb close	images/stim_007.png
+360	5	24	index close	images/stim_008.png
+365	5	23	middle close	images/stim_009.png
+370	5	22	ring close	images/stim_010.png
+375	5	32	pinky close closed palm	images/stim_006.png
+380	5	33	pinky open	images/stim_010.png
+385	5	29	ring open	images/stim_009.png
+390	5	28	middle open	images/stim_008.png
+395	5	27	index open	images/stim_007.png
+400	5	35	thumb open open palm	images/stim_001.png
