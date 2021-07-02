@@ -1,0 +1,8 @@
+{
+  "COM": {
+    "TRIGGER": {
+      "PORT": "COM5",
+      "BAUDRATE": 115200
+    }
+  }
+}

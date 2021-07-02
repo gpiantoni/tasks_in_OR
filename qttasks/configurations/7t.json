@@ -1,0 +1,13 @@
+{
+  "COM": {
+    "INPUT": {
+      "PORT": "COM1",
+      "BAUDRATE": 9600,
+      "START_TRIGGER": 49
+    }
+  },
+  "SCREEN": {
+    "DOWNWARDS": -100,
+    "RIGHTWARDS": 0
+  }
+}

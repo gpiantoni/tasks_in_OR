@@ -44,8 +44,11 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 
 from .dataglove import FiveDTGlove
-from .paths import LOG_DIR, SOUNDS_DIR, DEFAULTS_JSON, TASKS_DIR, update
+from .paths import LOG_DIR, SOUNDS_DIR, DEFAULTS_JSON, TASKS_DIR, update, CONFIG_DIR
 from .read_tsv import read_stimuli, read_fast_stimuli
+
+TASKS = sorted([x.stem for x in TASKS_DIR.iterdir()])
+CONFIGURATIONS = sorted([x.stem for x in CONFIG_DIR.glob('*.json')])
 
 lg = logging.getLogger('qttask')
 lg.addHandler(logging.StreamHandler())
@@ -61,16 +64,6 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 app = QApplication([])
-
-logname = LOG_DIR / f'log_{datetime.now():%Y%m%d_%H%M%S}.txt'
-
-logging.basicConfig(
-    filename=logname,
-    filemode='w',
-    format='%(asctime)s.%(msecs)03d\t%(name)s\t%(levelname)s\t%(message)s',
-    datefmt='%H:%M:%S',
-    level=logging.DEBUG)
-logging.info("Log File")
 
 
 class PrettyWidget(QOpenGLWidget):
@@ -143,6 +136,7 @@ class PrettyWidget(QOpenGLWidget):
             return
 
         for i in range(2):  # TODO: we should use scan_USB but I get error
+            logname = self.P['logname']
             DATAGLOVE_LOG = logname.parent / (logname.stem + f'_dataglove{i}.txt')
             new_glove = FiveDTGlove(DATAGLOVE_LOG)
             try:
@@ -464,8 +458,14 @@ def main():
     parser.add_argument(
         'task',
         nargs='?',
-        help='folder with the task information (it needs at least a "parameters.json" file)')
+        help='one of [{}]'.format(', '.join(TASKS)))
+    parser.add_argument(
+        'configuration',
+        nargs='?',
+        default=None,
+        help='empty or one of [{}]'.format(', '.join(CONFIGURATIONS)))
     args = parser.parse_args()
+    print(args)
 
     with DEFAULTS_JSON.open() as f:
         PARAMETERS = load(f)
@@ -474,13 +474,34 @@ def main():
     parameter_json = task_dir / 'parameters.json'
     with parameter_json.open() as f:
         CHANGES = load(f)
-
     PARAMETERS = update(PARAMETERS, CHANGES)
+
+    if args.configuration is not None:
+        parameter_json = CONFIG_DIR / f'{args.configuration}.json'
+        with parameter_json.open() as f:
+            CHANGES = load(f)
+        PARAMETERS = update(PARAMETERS, CHANGES)
+
+    PARAMETERS['task'] = args.task
+    PARAMETERS['configuration'] = args.configuration
+
     PARAMETERS['TASK_TSV'] = (task_dir / PARAMETERS['TASK_TSV']).resolve()
-    
+
+    now = datetime.now()
+    logname = LOG_DIR / f'log_{now:%Y%m%d_%H%M%S}.txt'
+
+    logging.basicConfig(
+        filename=logname,
+        filemode='w',
+        format='%(asctime)s.%(msecs)03d\t%(name)s\t%(levelname)s\t%(message)s',
+        datefmt='%H:%M:%S',
+        level=logging.DEBUG)
+    logging.info(str(now))
+    PARAMETERS['logname'] = logname
+
     if Process is not None:
         ps = Process()
-        ps.nice(HIGH_PRIORITY_CLASS)    
+        ps.nice(HIGH_PRIORITY_CLASS)
 
     lg.debug(pformat(PARAMETERS))
     w = PrettyWidget(PARAMETERS)
