@@ -28,5 +28,5 @@
     "END": "S8_part2.wav"
   },
   "TASK_TSV": "timing.tsv",
-  "OUTRO": 5
+  "OUTRO": 4
 }
