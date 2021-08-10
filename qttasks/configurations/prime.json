@@ -4,6 +4,6 @@
       "PORT": "COM5",
       "BAUDRATE": 115200
     }
-  }
+  },
   "TASK_TSV": "timing_or.tsv"
 }
