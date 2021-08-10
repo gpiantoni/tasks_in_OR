@@ -485,8 +485,6 @@ def main():
     PARAMETERS['task'] = args.task
     PARAMETERS['configuration'] = args.configuration
 
-    PARAMETERS['TASK_TSV'] = (task_dir / PARAMETERS['TASK_TSV']).resolve()
-
     now = datetime.now()
     logname = LOG_DIR / f'log_{now:%Y%m%d_%H%M%S}.txt'
 
@@ -502,6 +500,13 @@ def main():
     if Process is not None:
         ps = Process()
         ps.nice(HIGH_PRIORITY_CLASS)
+
+    task_tsv = (task_dir / PARAMETERS['TASK_TSV']).resolve()
+    if task_tsv.exists():
+        PARAMETERS['TASK_TSV'] = task_tsv
+    else:
+        lg.debug(f'Cannot find {task_tsv}, using default "timing.tsv"')
+        PARAMETERS['TASK_TSV'] = (task_dir / 'timing.tsv').resolve()
 
     lg.debug(pformat(PARAMETERS))
     w = PrettyWidget(PARAMETERS)
